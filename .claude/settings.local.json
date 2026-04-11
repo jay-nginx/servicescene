@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:servicescene.com.au)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(curl -s -o /Users/jay.desai/WORK/ClaudeMain/ServiceScene/images/logo_test1.jpg \"https://servicescene.com.au/images/title_banner_index.jpg\")",
+      "Bash(xargs ls:*)",
+      "Bash(npm install:*)",
+      "Bash(xargs kill:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}

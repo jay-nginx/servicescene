@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 80" width="380" height="80">
+  <defs>
+    <linearGradient id="markGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f48c06"/>
+      <stop offset="100%" stop-color="#e85d04"/>
+    </linearGradient>
+    <linearGradient id="glowLine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#e85d04" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#e85d04" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ── Brand mark: rounded square with SS ── -->
+  <rect x="0" y="8" width="64" height="64" rx="12" fill="url(#markGrad)"/>
+
+  <!-- S top -->
+  <text x="32" y="38"
+    font-family="'Arial Black', Impact, sans-serif"
+    font-weight="900"
+    font-size="22"
+    fill="white"
+    text-anchor="middle"
+    letter-spacing="-1">S</text>
+
+  <!-- S bottom -->
+  <text x="32" y="60"
+    font-family="'Arial Black', Impact, sans-serif"
+    font-weight="900"
+    font-size="22"
+    fill="rgba(255,255,255,0.45)"
+    text-anchor="middle"
+    letter-spacing="-1">S</text>
+
+  <!-- Thin horizontal divider inside mark -->
+  <rect x="10" y="42" width="44" height="1.5" rx="1" fill="rgba(255,255,255,0.35)"/>
+
+  <!-- ── Text block ── -->
+  <!-- SERVICE -->
+  <text x="82" y="40"
+    font-family="'Arial Black', Impact, Arial, sans-serif"
+    font-weight="900"
+    font-size="32"
+    fill="#0f1f3d"
+    letter-spacing="2">SERVICE</text>
+
+  <!-- SCENE -->
+  <text x="84" y="64"
+    font-family="'Arial Black', Impact, Arial, sans-serif"
+    font-weight="900"
+    font-style="italic"
+    font-size="26"
+    fill="#0f1f3d"
+    letter-spacing="5">SCENE</text>
+
+  <!-- Orange accent line under SCENE -->
+  <rect x="82" y="68" width="220" height="2" rx="1" fill="url(#glowLine)"/>
+
+  <!-- Separator pipe -->
+  <rect x="306" y="28" width="1.5" height="34" rx="1" fill="#d0d8e8"/>
+
+  <!-- ELECTRONIC SERVICING stacked right -->
+  <text x="316" y="44"
+    font-family="Arial, sans-serif"
+    font-weight="700"
+    font-size="8"
+    fill="#6b7a9f"
+    letter-spacing="1">ELECTRONIC</text>
+  <text x="316" y="56"
+    font-family="Arial, sans-serif"
+    font-weight="700"
+    font-size="8"
+    fill="#6b7a9f"
+    letter-spacing="1">SERVICING</text>
+
+  <!-- ACN -->
+  <text x="316" y="66"
+    font-family="Arial, sans-serif"
+    font-size="6"
+    fill="#aab4c8">ACN 087 486 995</text>
+</svg>

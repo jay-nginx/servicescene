@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1775898961563,
+    "title": "Panasonic 42\" Plasma TV",
+    "description": "Fully refurbished and tested. Remote included. Great picture quality. No stand.",
+    "price": 120,
+    "condition": "Good",
+    "category": "Television",
+    "photo": "",
+    "listed": true,
+    "addedAt": "2026-04-11T09:15:57.947Z"
+  },
+  {
+    "id": 1775898960812,
+    "title": "Sony Universal Remote Control",
+    "description": "Compatible with most Sony TVs and AV equipment. Includes batteries.",
+    "price": 15,
+    "condition": "Good",
+    "category": "Remote Control",
+    "photo": "",
+    "listed": true,
+    "addedAt": "2026-04-11T09:15:57.947Z"
+  },
+  {
+    "id": 1775898962746,
+    "title": "LG Blu-ray Player",
+    "description": "Plays Blu-ray and DVD. HDMI cable included. Minor cosmetic scratches.",
+    "price": 45,
+    "condition": "Fair",
+    "category": "Blu-ray / DVD",
+    "photo": "",
+    "listed": true,
+    "addedAt": "2026-04-11T09:15:57.947Z"
+  }
+]

@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin – Service Scene</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body class="admin-page">
+
+<!-- ══════════════════════════════════════════
+     LOGIN SCREEN
+══════════════════════════════════════════ -->
+<div id="login-screen" class="login-wrap">
+  <div class="login-box">
+    <img src="images/logo.svg" alt="Service Scene" class="login-logo"
+         onerror="this.style.display='none'" />
+    <h2>Admin Login</h2>
+    <p>Service Scene · Items Management</p>
+    <div id="login-error" class="error-msg" style="display:none">Incorrect password. Try again.</div>
+    <form id="login-form">
+      <div class="form-group">
+        <label for="admin-pass">Password</label>
+        <input type="password" id="admin-pass" placeholder="Enter admin password" autocomplete="current-password" required />
+      </div>
+      <button type="submit" class="btn btn-primary btn-full" id="login-btn">Sign In</button>
+    </form>
+    <p style="margin-top:16px;font-size:.8rem;color:#94a3b8;text-align:center">
+      <a href="index.html" style="color:#94a3b8">← Back to website</a>
+    </p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     ADMIN PANEL (hidden until logged in)
+══════════════════════════════════════════ -->
+<div id="admin-panel" style="display:none">
+
+  <div class="admin-topbar">
+    <div style="display:flex;align-items:center;gap:16px">
+      <img src="images/logo.svg" alt="Service Scene" style="height:32px;object-fit:contain" onerror="this.style.display='none'" />
+      <strong>Admin Panel</strong>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px">
+      <a href="index.html" target="_blank">View Website ↗</a>
+      <button onclick="adminLogout()" class="btn btn-secondary" style="padding:7px 16px;font-size:.85rem">Sign Out</button>
+    </div>
+  </div>
+
+  <div class="admin-container">
+
+    <!-- ── Add New Item ── -->
+    <div class="admin-card">
+      <h3>Add New Item for Sale</h3>
+      <form id="add-item-form">
+        <!-- Photo upload -->
+        <div class="form-group">
+          <label>Photo</label>
+          <div class="photo-drop" id="photo-drop">
+            <input type="file" id="photo-input" accept="image/*" capture="environment" />
+            <div class="photo-drop-icon">📷</div>
+            <p><strong>Tap to take a photo</strong> or choose from gallery</p>
+            <p style="font-size:.78rem;margin-top:4px">Supports JPG, PNG, WEBP — max 8MB</p>
+          </div>
+          <div class="photo-preview" id="photo-preview">
+            <img id="photo-preview-img" src="" alt="Preview" />
+            <button type="button" onclick="clearPhoto()" class="btn btn-secondary" style="margin-top:8px;font-size:.82rem;padding:6px 14px">Remove Photo</button>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="item-title">Item Title *</label>
+            <input type="text" id="item-title" placeholder='e.g. Samsung 55" LCD TV' required />
+          </div>
+          <div class="form-group">
+            <label for="item-price">Price ($AUD)</label>
+            <input type="number" id="item-price" placeholder="e.g. 80  (leave blank = POA)" min="0" step="1" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="item-condition">Condition *</label>
+            <select id="item-condition" required>
+              <option value="Good">Good – Works perfectly</option>
+              <option value="Fair">Fair – Works, minor issues</option>
+              <option value="Parts Only">Parts Only – For spare parts</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="item-category">Category</label>
+            <select id="item-category">
+              <option value="Television">Television</option>
+              <option value="Remote Control">Remote Control</option>
+              <option value="Audio Equipment">Audio Equipment</option>
+              <option value="Blu-ray / DVD">Blu-ray / DVD</option>
+              <option value="White Goods">White Goods</option>
+              <option value="Parts & Accessories">Parts &amp; Accessories</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="item-desc">Description</label>
+          <textarea id="item-desc" rows="3" placeholder="Brand, model, what's included, any faults, pickup info…"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="add-btn">Add Item to Website</button>
+      </form>
+    </div>
+
+    <!-- ── Current Listings ── -->
+    <div class="admin-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+        <h3 style="margin:0">Current Listings</h3>
+        <span id="listing-count" style="font-size:.85rem;color:#64748b"></span>
+      </div>
+      <div class="admin-items-grid" id="admin-items-grid"></div>
+      <p id="admin-empty" style="color:#94a3b8;font-size:.9rem;display:none">No items listed yet. Add one above.</p>
+    </div>
+
+    <!-- ── Change Password ── -->
+    <div class="admin-card">
+      <h3>Change Password</h3>
+      <form id="change-pass-form" style="max-width:380px">
+        <div class="form-group">
+          <label for="new-pass">New Password</label>
+          <input type="password" id="new-pass" placeholder="New password (min 6 chars)" minlength="6" required />
+        </div>
+        <div class="form-group">
+          <label for="confirm-pass">Confirm Password</label>
+          <input type="password" id="confirm-pass" placeholder="Repeat new password" required />
+        </div>
+        <div id="pass-msg" style="font-size:.85rem;margin-bottom:10px;display:none"></div>
+        <button type="submit" class="btn btn-secondary">Update Password</button>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal-overlay" id="edit-modal" style="display:none">
+  <div class="modal-box" style="max-width:500px">
+    <button class="modal-close" onclick="closeEditModal()">✕</button>
+    <div class="modal-body" style="padding:28px">
+      <h3 style="margin-bottom:20px">Edit Item</h3>
+      <form id="edit-item-form">
+        <input type="hidden" id="edit-item-id" />
+        <div class="form-group">
+          <label>Photo</label>
+          <div class="photo-drop" id="edit-photo-drop">
+            <input type="file" id="edit-photo-input" accept="image/*" capture="environment" />
+            <div class="photo-drop-icon">📷</div>
+            <p><strong>Tap to replace photo</strong></p>
+          </div>
+          <div class="photo-preview" id="edit-photo-preview">
+            <img id="edit-photo-preview-img" src="" alt="Preview" />
+            <button type="button" onclick="clearEditPhoto()" class="btn btn-secondary" style="margin-top:8px;font-size:.82rem;padding:6px 14px">Remove Photo</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="edit-title">Title</label>
+          <input type="text" id="edit-title" required />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="edit-price">Price ($)</label>
+            <input type="number" id="edit-price" min="0" step="1" />
+          </div>
+          <div class="form-group">
+            <label for="edit-condition">Condition</label>
+            <select id="edit-condition">
+              <option value="Good">Good</option>
+              <option value="Fair">Fair</option>
+              <option value="Parts Only">Parts Only</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="edit-desc">Description</label>
+          <textarea id="edit-desc" rows="3"></textarea>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button type="submit" class="btn btn-primary" style="flex:1" id="save-edit-btn">Save Changes</button>
+          <button type="button" onclick="closeEditModal()" class="btn btn-secondary">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════
+   ADMIN SCRIPT – all data via REST API
+   ═══════════════════════════════════════════════ */
+
+const SESSION_KEY = 'servicescene_token';
+
+// ── API helper ──────────────────────────────────────
+async function api(method, path, body) {
+  const opts = {
+    method,
+    headers: { 'Content-Type': 'application/json' }
+  };
+  const token = sessionStorage.getItem(SESSION_KEY);
+  if (token) opts.headers['Authorization'] = 'Bearer ' + token;
+  if (body !== undefined) opts.body = JSON.stringify(body);
+
+  const res  = await fetch(path, opts);
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+  return data;
+}
+
+// ── Auth ────────────────────────────────────────────
+function isLoggedIn() { return !!sessionStorage.getItem(SESSION_KEY); }
+
+async function adminLogout() {
+  try { await api('POST', '/api/auth/logout'); } catch {}
+  sessionStorage.removeItem(SESSION_KEY);
+  location.reload();
+}
+
+function showAdmin() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('admin-panel').style.display  = 'block';
+  loadAdminItems();
+}
+
+// ── Login form ──────────────────────────────────────
+document.getElementById('login-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn  = document.getElementById('login-btn');
+  const pass = document.getElementById('admin-pass').value;
+  btn.disabled    = true;
+  btn.textContent = 'Signing in…';
+
+  try {
+    const { token } = await api('POST', '/api/auth/login', { password: pass });
+    sessionStorage.setItem(SESSION_KEY, token);
+    showAdmin();
+  } catch {
+    document.getElementById('login-error').style.display = 'block';
+    document.getElementById('admin-pass').value = '';
+    document.getElementById('admin-pass').focus();
+  } finally {
+    btn.disabled    = false;
+    btn.textContent = 'Sign In';
+  }
+});
+
+// Auto-show if already logged in this session
+if (isLoggedIn()) showAdmin();
+
+// ── Helpers ─────────────────────────────────────────
+function formatPrice(p) {
+  if (p === '' || p === null || p === undefined) return 'POA';
+  const n = parseFloat(p);
+  return isNaN(n) ? 'POA' : '$' + n.toFixed(0);
+}
+
+function condClass(c) {
+  return { 'Good':'cond-good', 'Fair':'cond-fair', 'Parts Only':'cond-parts' }[c] || 'cond-good';
+}
+
+function escHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Load & render admin items ───────────────────────
+async function loadAdminItems() {
+  const grid  = document.getElementById('admin-items-grid');
+  const empty = document.getElementById('admin-empty');
+  const count = document.getElementById('listing-count');
+
+  grid.innerHTML = `<p style="color:#94a3b8;font-size:.9rem">Loading…</p>`;
+
+  try {
+    const items = await api('GET', '/api/items/all');
+    count.textContent = items.length + ' item' + (items.length !== 1 ? 's' : '');
+
+    if (items.length === 0) {
+      grid.innerHTML = '';
+      empty.style.display = 'block';
+      return;
+    }
+
+    empty.style.display = 'none';
+    grid.innerHTML = items.map(item => `
+      <div class="admin-item-card">
+        ${item.photo
+          ? `<img src="${item.photo}" alt="${escHtml(item.title)}" />`
+          : `<div style="width:100%;height:160px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:2.5rem">📺</div>`}
+        <div class="admin-item-body">
+          <h4>${escHtml(item.title)}</h4>
+          <p>${escHtml(item.condition || '')} ${item.category ? '· ' + escHtml(item.category) : ''}</p>
+          <span class="admin-item-price">${formatPrice(item.price)}</span>
+          <div class="admin-item-actions">
+            <button class="btn btn-secondary" style="font-size:.8rem;padding:6px 10px"
+              onclick="openEditModal(${item.id})">✏️ Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem(${item.id})">🗑 Delete</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  } catch (err) {
+    grid.innerHTML = `<p style="color:#991b1b;font-size:.9rem">Failed to load items: ${escHtml(err.message)}</p>`;
+  }
+}
+
+// ── Delete ──────────────────────────────────────────
+async function deleteItem(id) {
+  if (!confirm('Delete this item? This cannot be undone.')) return;
+  try {
+    await api('DELETE', `/api/items/${id}`);
+    showToast('Item deleted.');
+    loadAdminItems();
+  } catch (err) {
+    showToast('Error: ' + err.message);
+  }
+}
+
+// ── Photo handling (add form) ───────────────────────
+let newPhotoData = null;
+
+document.getElementById('photo-input').addEventListener('change', function() {
+  if (!this.files[0]) return;
+  resizeAndPreview(this.files[0], 'photo-preview', 'photo-preview-img', d => { newPhotoData = d; });
+});
+
+function clearPhoto() {
+  newPhotoData = null;
+  document.getElementById('photo-input').value = '';
+  document.getElementById('photo-preview').style.display = 'none';
+}
+
+// ── Add item form ───────────────────────────────────
+document.getElementById('add-item-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = document.getElementById('add-btn');
+  btn.disabled    = true;
+  btn.textContent = 'Adding…';
+
+  const payload = {
+    title:       document.getElementById('item-title').value.trim(),
+    price:       document.getElementById('item-price').value,
+    condition:   document.getElementById('item-condition').value,
+    category:    document.getElementById('item-category').value,
+    description: document.getElementById('item-desc').value.trim(),
+    photo:       newPhotoData || ''
+  };
+
+  try {
+    await api('POST', '/api/items', payload);
+    e.target.reset();
+    clearPhoto();
+    showToast('✅ Item added successfully!');
+    loadAdminItems();
+  } catch (err) {
+    showToast('Error: ' + err.message);
+  } finally {
+    btn.disabled    = false;
+    btn.textContent = 'Add Item to Website';
+  }
+});
+
+// ── Edit modal ──────────────────────────────────────
+let editPhotoData = undefined; // undefined=no change, null=cleared, string=new data
+
+async function openEditModal(id) {
+  // Fetch latest data from server
+  let item;
+  try {
+    const items = await api('GET', '/api/items/all');
+    item = items.find(i => i.id === id);
+  } catch { return; }
+  if (!item) return;
+
+  document.getElementById('edit-item-id').value   = id;
+  document.getElementById('edit-title').value     = item.title || '';
+  document.getElementById('edit-price').value     = item.price ?? '';
+  document.getElementById('edit-condition').value = item.condition || 'Good';
+  document.getElementById('edit-desc').value      = item.description || '';
+
+  editPhotoData = undefined;
+
+  const prevWrap = document.getElementById('edit-photo-preview');
+  const prevImg  = document.getElementById('edit-photo-preview-img');
+  if (item.photo) {
+    prevImg.src = item.photo;
+    prevWrap.style.display = 'block';
+  } else {
+    prevWrap.style.display = 'none';
+  }
+
+  document.getElementById('edit-photo-input').value = '';
+  document.getElementById('edit-modal').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeEditModal() {
+  document.getElementById('edit-modal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+document.getElementById('edit-photo-input').addEventListener('change', function() {
+  if (!this.files[0]) return;
+  resizeAndPreview(this.files[0], 'edit-photo-preview', 'edit-photo-preview-img', d => { editPhotoData = d; });
+});
+
+function clearEditPhoto() {
+  editPhotoData = null;
+  document.getElementById('edit-photo-input').value = '';
+  document.getElementById('edit-photo-preview').style.display = 'none';
+}
+
+document.getElementById('edit-item-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = document.getElementById('save-edit-btn');
+  btn.disabled    = true;
+  btn.textContent = 'Saving…';
+
+  const id      = parseInt(document.getElementById('edit-item-id').value, 10);
+  const payload = {
+    title:       document.getElementById('edit-title').value.trim(),
+    price:       document.getElementById('edit-price').value,
+    condition:   document.getElementById('edit-condition').value,
+    description: document.getElementById('edit-desc').value.trim()
+  };
+
+  // Only include photo if it changed
+  if (editPhotoData !== undefined) {
+    payload.photo = editPhotoData === null ? '' : editPhotoData;
+  }
+
+  try {
+    await api('PUT', `/api/items/${id}`, payload);
+    closeEditModal();
+    showToast('✅ Item updated!');
+    loadAdminItems();
+  } catch (err) {
+    showToast('Error: ' + err.message);
+  } finally {
+    btn.disabled    = false;
+    btn.textContent = 'Save Changes';
+  }
+});
+
+// ── Change password ─────────────────────────────────
+document.getElementById('change-pass-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const np  = document.getElementById('new-pass').value;
+  const cp  = document.getElementById('confirm-pass').value;
+  const msg = document.getElementById('pass-msg');
+
+  if (np !== cp) {
+    msg.style.display = 'block';
+    msg.style.color   = '#991b1b';
+    msg.textContent   = 'Passwords do not match.';
+    return;
+  }
+
+  try {
+    await api('POST', '/api/auth/change-password', { password: np });
+    msg.style.display = 'block';
+    msg.style.color   = '#166534';
+    msg.textContent   = '✅ Password updated. You will be signed out.';
+    e.target.reset();
+    setTimeout(() => {
+      sessionStorage.removeItem(SESSION_KEY);
+      location.reload();
+    }, 2500);
+  } catch (err) {
+    msg.style.display = 'block';
+    msg.style.color   = '#991b1b';
+    msg.textContent   = 'Error: ' + err.message;
+  }
+});
+
+// ── Image resize helper ─────────────────────────────
+function resizeAndPreview(file, previewId, imgId, callback) {
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      const canvas = document.createElement('canvas');
+      const MAX = 800;
+      let w = img.width, h = img.height;
+      if (w > MAX || h > MAX) {
+        if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
+        else       { w = Math.round(w * MAX / h); h = MAX; }
+      }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      const data = canvas.toDataURL('image/jpeg', 0.78);
+      document.getElementById(previewId).style.display = 'block';
+      document.getElementById(imgId).src = data;
+      callback(data);
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── Toast ───────────────────────────────────────────
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.textContent = msg;
+  Object.assign(t.style, {
+    position: 'fixed', bottom: '28px', right: '24px',
+    background: '#1a2b4a', color: '#fff',
+    padding: '12px 20px', borderRadius: '10px',
+    fontSize: '.9rem', fontWeight: '600',
+    boxShadow: '0 6px 24px rgba(0,0,0,.25)',
+    zIndex: '999', transition: 'opacity .4s',
+    fontFamily: 'Inter, sans-serif'
+  });
+  document.body.appendChild(t);
+  setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 400); }, 2500);
+}
+
+// ── Drag-and-drop on photo zones ────────────────────
+['photo-drop', 'edit-photo-drop'].forEach(id => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener('dragover',  e => { e.preventDefault(); el.classList.add('drag-over'); });
+  el.addEventListener('dragleave', () => el.classList.remove('drag-over'));
+  el.addEventListener('drop', e => {
+    e.preventDefault();
+    el.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (!file || !file.type.startsWith('image/')) return;
+    const isEdit = id.startsWith('edit');
+    resizeAndPreview(
+      file,
+      isEdit ? 'edit-photo-preview'     : 'photo-preview',
+      isEdit ? 'edit-photo-preview-img' : 'photo-preview-img',
+      d => { if (isEdit) editPhotoData = d; else newPhotoData = d; }
+    );
+  });
+});
+</script>
+</body>
+</html>
