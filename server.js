@@ -4,10 +4,11 @@
    Database: flat JSON files in /db/
 ═══════════════════════════════════════════════════ */
 
-const express  = require('express');
-const fs       = require('fs');
-const path     = require('path');
-const crypto   = require('crypto');
+const express    = require('express');
+const fs         = require('fs');
+const path       = require('path');
+const crypto     = require('crypto');
+const nodemailer = require('nodemailer');
 
 const app  = express();
 const PORT = process.env.PORT || 3456;
@@ -324,6 +325,79 @@ app.delete('/api/announcement', requireAuth, (req, res) => {
   saveAnnouncement(null);
   console.log('🗑  Announcement cleared');
   res.json({ ok: true });
+});
+
+// ══════════════════════════════════════════════════
+//  CONTACT FORM ROUTE
+// ══════════════════════════════════════════════════
+
+// Nodemailer transporter — configured via environment variables.
+// Set these in cPanel → Setup Node.js App → Environment Variables:
+//   SMTP_HOST  = mail.servicescene.com.au  (or your host's mail server)
+//   SMTP_PORT  = 465
+//   SMTP_USER  = info@servicescene.com.au
+//   SMTP_PASS  = (your email account password)
+const transporter = nodemailer.createTransport({
+  host:   process.env.SMTP_HOST || 'localhost',
+  port:   parseInt(process.env.SMTP_PORT || '465'),
+  secure: parseInt(process.env.SMTP_PORT || '465') === 465,
+  auth: {
+    user: process.env.SMTP_USER || '',
+    pass: process.env.SMTP_PASS || ''
+  }
+});
+
+// POST /api/contact  – public, sends enquiry email
+app.post('/api/contact', async (req, res) => {
+  const { name, phone, email, subject, message } = req.body || {};
+
+  if (!name || !name.trim())    return res.status(400).json({ error: 'Name is required' });
+  if (!email || !email.trim())  return res.status(400).json({ error: 'Email is required' });
+  if (!message || !message.trim()) return res.status(400).json({ error: 'Message is required' });
+
+  const mailOptions = {
+    from:     `"Service Scene Website" <${process.env.SMTP_USER || 'info@servicescene.com.au'}>`,
+    to:       'info@servicescene.com.au',
+    replyTo:  `"${name.trim()}" <${email.trim()}>`,
+    subject:  `[Website Enquiry] ${subject || 'General Enquiry'} – ${name.trim()}`,
+    text: `
+New enquiry from the Service Scene website
+==========================================
+
+Name:     ${name.trim()}
+Phone:    ${phone ? phone.trim() : 'Not provided'}
+Email:    ${email.trim()}
+Subject:  ${subject || 'General Enquiry'}
+
+Message:
+${message.trim()}
+
+--
+Sent via servicescene.com.au contact form
+    `.trim(),
+    html: `
+<p><strong>New enquiry from the Service Scene website</strong></p>
+<table cellpadding="6" style="border-collapse:collapse;font-family:sans-serif;font-size:14px">
+  <tr><td><strong>Name</strong></td><td>${name.trim()}</td></tr>
+  <tr><td><strong>Phone</strong></td><td>${phone ? phone.trim() : 'Not provided'}</td></tr>
+  <tr><td><strong>Email</strong></td><td><a href="mailto:${email.trim()}">${email.trim()}</a></td></tr>
+  <tr><td><strong>Subject</strong></td><td>${subject || 'General Enquiry'}</td></tr>
+</table>
+<p><strong>Message:</strong></p>
+<p style="background:#f5f5f5;padding:12px;border-radius:6px;white-space:pre-wrap">${message.trim()}</p>
+<hr/>
+<p style="color:#888;font-size:12px">Sent via servicescene.com.au contact form</p>
+    `.trim()
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log(`📧 Contact enquiry from ${name.trim()} <${email.trim()}>`);
+    res.json({ ok: true });
+  } catch (err) {
+    console.error('❌ Failed to send contact email:', err.message);
+    res.status(500).json({ error: 'Failed to send message. Please call us directly on 03 9888 1844.' });
+  }
 });
 
 // ── Start ──────────────────────────────────────────

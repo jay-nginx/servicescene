@@ -25,13 +25,47 @@ window.addEventListener('scroll', () => {
 // ── Contact form ──
 const contactForm = document.getElementById('contact-form');
 if (contactForm) {
-  contactForm.addEventListener('submit', e => {
+  contactForm.addEventListener('submit', async e => {
     e.preventDefault();
-    document.getElementById('form-success').style.display = 'block';
-    contactForm.reset();
-    setTimeout(() => {
-      document.getElementById('form-success').style.display = 'none';
-    }, 5000);
+
+    const btn = contactForm.querySelector('button[type="submit"]');
+    const successEl = document.getElementById('form-success');
+    const errorEl   = document.getElementById('form-error');
+
+    // Reset state
+    if (errorEl) errorEl.style.display = 'none';
+    successEl.style.display = 'none';
+    btn.disabled    = true;
+    btn.textContent = 'Sending…';
+
+    const payload = {
+      name:    document.getElementById('cf-name').value,
+      phone:   document.getElementById('cf-phone').value,
+      email:   document.getElementById('cf-email').value,
+      subject: document.getElementById('cf-subject').value,
+      message: document.getElementById('cf-message').value
+    };
+
+    try {
+      const res  = await fetch('/api/contact', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify(payload)
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        successEl.style.display = 'block';
+        contactForm.reset();
+      } else {
+        if (errorEl) { errorEl.textContent = data.error || 'Something went wrong.'; errorEl.style.display = 'block'; }
+      }
+    } catch (err) {
+      if (errorEl) { errorEl.textContent = 'Could not send message. Please call us on 03 9888 1844.'; errorEl.style.display = 'block'; }
+    } finally {
+      btn.disabled    = false;
+      btn.textContent = 'Send Message';
+    }
   });
 }
 

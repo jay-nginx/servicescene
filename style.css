@@ -836,6 +836,15 @@ ul  { list-style: none; }
   font-size: .9rem;
   font-weight: 500;
 }
+.form-error {
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  color: #991b1b;
+  padding: 14px 18px;
+  border-radius: var(--radius-sm);
+  font-size: .9rem;
+  font-weight: 500;
+}
 .error-msg {
   background: #fee2e2;
   border: 1px solid #fca5a5;
