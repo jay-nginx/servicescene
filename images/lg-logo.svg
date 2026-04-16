@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+
+  <!-- LG red background circle -->
+  <circle cx="50" cy="50" r="50" fill="#A50034"/>
+
+  <!-- ── L ──────────────────────────────────────
+       Vertical stroke: x=10..19, y=18..65
+       Horizontal base: x=10..36, y=57..65        -->
+  <rect x="10" y="18" width="10" height="48" fill="white"/>
+  <rect x="10" y="57" width="28" height="9"  fill="white"/>
+
+  <!-- ── G ──────────────────────────────────────
+       Strategy: white outer disc → red inner disc (ring) →
+       red rect erases top-right quadrant (the C-opening) →
+       white rect adds the inward horizontal arm
+       G centre: (67, 50)  outer r=23  inner r=15            -->
+  <circle cx="67" cy="50" r="23" fill="white"/>
+  <circle cx="67" cy="50" r="15" fill="#A50034"/>
+
+  <!-- erase top-right: covers x=55..92, y=27..50 -->
+  <rect x="55" y="27" width="37" height="23" fill="#A50034"/>
+
+  <!-- horizontal arm at centre: x=67..90, y=46..55 -->
+  <rect x="67" y="46" width="23" height="9" fill="white"/>
+
+</svg>
