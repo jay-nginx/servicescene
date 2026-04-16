@@ -3,33 +3,56 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Service Scene – Electronics Repair, Melbourne Eastern Suburbs</title>
-  <meta name="description" content="Service Scene – authorised repair centre for TVs, audio, white goods and brown goods. Serving Melbourne's Eastern Suburbs since 1989." />
+  <title>Service Scene – Electronics Repair | Mt Waverley, Melbourne</title>
+  <meta name="description" content="Expert TV, audio, white goods & brown goods repair in Melbourne's Eastern Suburbs. Est. 1989. Call 03 9888 1844." />
   <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Cardo:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
 </head>
 <body>
 
 <!-- ══════════════════════════════════════════
-     HEADER / NAV
+     TOP BAR
 ══════════════════════════════════════════ -->
-<header class="site-header" id="top">
-  <div class="container header-inner">
-    <a href="#top" class="logo-link">
-      <img src="images/logo.svg" alt="Service Scene Logo" class="logo-img" onerror="this.style.display='none';document.getElementById('logo-text').style.display='flex'" />
-      <span class="logo-text" id="logo-text">Service Scene</span>
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-left">
+      <span>📍 61 Wadham Pde, Mt Waverley VIC 3149</span>
+      <span class="topbar-divider">|</span>
+      <span>✉️ info@servicescene.com.au</span>
+    </div>
+    <div class="topbar-right">
+      <span>Mon–Fri: 9am – 5pm</span>
+      <span class="topbar-divider">|</span>
+      <a href="tel:0398881844">📞 03 9888 1844</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     HEADER
+══════════════════════════════════════════ -->
+<header class="site-header" id="site-header">
+  <div class="header-inner">
+    <a href="#" class="header-logo">
+      <img src="images/logo.svg" alt="Service Scene" onerror="this.src='images/ss-logo.png'" />
     </a>
-    <nav class="main-nav" id="main-nav">
-      <a href="#services">Services</a>
-      <a href="#about">About</a>
-      <a href="#forsale">For Sale</a>
-      <a href="#contact">Contact</a>
-      <a href="admin.html" class="nav-admin">Admin</a>
-    </nav>
+
     <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
       <span></span><span></span><span></span>
     </button>
+
+    <nav class="main-nav" id="main-nav">
+      <a href="#services">Services</a>
+      <a href="#quotes">Quotes &amp; Pricing</a>
+      <a href="#forsale">For Sale</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <div class="header-cta">
+      <a href="tel:0398881844" class="header-phone">03 9888 1844</a>
+      <a href="#quotes" class="btn btn-dark">Get a Quote</a>
+    </div>
   </div>
 </header>
 
@@ -37,23 +60,32 @@
      HERO
 ══════════════════════════════════════════ -->
 <section class="hero">
-  <div class="hero-bg"></div>
-  <div class="container hero-content">
+  <div class="hero-inner">
     <div class="hero-badge">Est. 1989 · Melbourne Eastern Suburbs</div>
-    <h1>Expert Electronics<br /><span class="accent">Repair & Service</span></h1>
-    <p class="hero-sub">Authorised repair centre for TVs, audio equipment, white goods &amp; brown goods. Honest assessments, quality repairs.</p>
+    <h1>Melbourne's Trusted<br /><em>Electronics Repair</em> Specialists</h1>
+    <p>Authorised service centre for TVs, audio equipment, white goods &amp; brown goods. Honest assessments, quality repairs, fair pricing.</p>
     <div class="hero-actions">
-      <a href="#contact" class="btn btn-primary">Get a Quote</a>
-      <a href="#services" class="btn btn-outline">Our Services</a>
+      <a href="tel:0398881844" class="btn btn-white btn-lg">📞 Call 03 9888 1844</a>
+      <a href="#services" class="btn btn-outline-white btn-lg">Our Services</a>
     </div>
     <div class="hero-stats">
-      <div class="stat"><span class="stat-num">35+</span><span class="stat-label">Years Experience</span></div>
-      <div class="stat-divider"></div>
-      <div class="stat"><span class="stat-num">ESCA</span><span class="stat-label">Member</span></div>
-      <div class="stat-divider"></div>
-      <div class="stat"><span class="stat-num">Auth.</span><span class="stat-label">Service Centre</span></div>
+      <div class="hero-stat">
+        <strong>35+</strong>
+        <span>Years Experience</span>
+      </div>
+      <div class="hero-stat-divider"></div>
+      <div class="hero-stat">
+        <strong>All Brands</strong>
+        <span>Serviced &amp; Repaired</span>
+      </div>
+      <div class="hero-stat-divider"></div>
+      <div class="hero-stat">
+        <strong>Local</strong>
+        <span>Mt Waverley Based</span>
+      </div>
     </div>
   </div>
+  <div class="hero-bg"></div>
 </section>
 
 <!-- ══════════════════════════════════════════
@@ -62,129 +94,176 @@
 <section class="section" id="services">
   <div class="container">
     <div class="section-header">
-      <span class="section-tag">What We Fix</span>
+      <p class="section-label">What We Fix</p>
       <h2>Our Services</h2>
-      <p>From your living room television to your kitchen appliances, we've got you covered.</p>
+      <p class="section-sub">We repair a wide range of consumer electronics and household appliances — all brands, all models.</p>
     </div>
+
     <div class="services-grid">
+
       <div class="service-card">
+        <span class="service-num">01</span>
         <div class="service-icon">📺</div>
-        <h3>Televisions</h3>
-        <p>LCD, OLED, Plasma, CRT and Projection TV repairs. All brands, all models.</p>
-        <ul>
-          <li>LED/LCD screens</li>
-          <li>Plasma displays</li>
-          <li>Smart TV diagnostics</li>
-          <li>3D televisions</li>
-        </ul>
+        <h3>Televisions &amp; Monitors</h3>
+        <p>LCD, LED, OLED, Plasma and CRT televisions. All screen sizes and brands including Samsung, LG, Sony and Panasonic.</p>
       </div>
+
       <div class="service-card">
+        <span class="service-num">02</span>
         <div class="service-icon">🔊</div>
         <h3>Audio Equipment</h3>
-        <p>Hi-fi systems, amplifiers, receivers, turntables and more restored to perfect sound.</p>
-        <ul>
-          <li>Amplifiers &amp; receivers</li>
-          <li>Home theatre systems</li>
-          <li>CD &amp; Blu-ray players</li>
-          <li>Turntables</li>
-        </ul>
+        <p>Amplifiers, receivers, home theatre systems, turntables, CD players and all hi-fi audio components.</p>
       </div>
+
       <div class="service-card">
-        <div class="service-icon">🎮</div>
-        <h3>Brown Goods</h3>
-        <p>Entertainment electronics including DVD players, recorders, set-top boxes and gaming consoles.</p>
-        <ul>
-          <li>DVD / Blu-ray recorders</li>
-          <li>Set-top boxes</li>
-          <li>VCR &amp; video equipment</li>
-          <li>Projectors</li>
-        </ul>
+        <span class="service-num">03</span>
+        <div class="service-icon">📡</div>
+        <h3>Remote Controls</h3>
+        <p>Remote control repairs and replacements. Universal remotes, original replacements and programming services.</p>
       </div>
+
       <div class="service-card">
-        <div class="service-icon">🏠</div>
-        <h3>White Goods</h3>
-        <p>Household appliance repairs keeping your home running smoothly.</p>
-        <ul>
-          <li>Washing machines</li>
-          <li>Dryers</li>
-          <li>Dishwashers</li>
-          <li>Refrigerators</li>
-        </ul>
+        <span class="service-num">04</span>
+        <div class="service-icon">🫙</div>
+        <h3>Microwaves</h3>
+        <p>Microwave oven repairs across all brands. Magnetron replacement, turntable motors, door switches and more.</p>
       </div>
+
       <div class="service-card">
+        <span class="service-num">05</span>
+        <div class="service-icon">🧹</div>
+        <h3>Vacuum Cleaners</h3>
+        <p>Upright, barrel, robotic and central vacuum repairs. Dyson, Miele, Electrolux and all other major brands.</p>
+      </div>
+
+      <div class="service-card">
+        <span class="service-num">06</span>
         <div class="service-icon">🔧</div>
-        <h3>On-Site Service</h3>
-        <p>Can't bring it in? We come to you within our service area in Melbourne's Eastern Suburbs.</p>
-        <ul>
-          <li>In-home diagnostics</li>
-          <li>Large screen TVs</li>
-          <li>Appliance repairs</li>
-          <li>Eastern Suburbs only</li>
-        </ul>
+        <h3>White Goods &amp; Appliances</h3>
+        <p>Washing machines, dryers, dishwashers and refrigerators repaired in-shop or at your home.</p>
       </div>
-      <div class="service-card">
-        <div class="service-icon">✅</div>
-        <h3>Warranty Repairs</h3>
-        <p>Authorised warranty &amp; out-of-warranty service for major brands including Panasonic, Toshiba and LG.</p>
-        <ul>
-          <li>In-warranty repairs</li>
-          <li>Authorised assessments</li>
-          <li>Genuine parts</li>
-          <li>Multi-brand certified</li>
-        </ul>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     WHY CHOOSE US
+══════════════════════════════════════════ -->
+<section class="section section-dark-alt" id="why-us">
+  <div class="container">
+    <div class="section-header section-header-light">
+      <p class="section-label-light">Why Service Scene</p>
+      <h2>Honest, Local, Experienced</h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon">🏆</div>
+        <h4>35+ Years Experience</h4>
+        <p>Serving Melbourne's Eastern Suburbs since 1989. We've seen every brand, every fault, every model.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">💬</div>
+        <h4>No Fix, No Fee</h4>
+        <p>If we can't fix it, you only pay the assessment fee — no surprises, no hidden charges.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">📍</div>
+        <h4>Local &amp; Convenient</h4>
+        <p>Easy drop-off in Mt Waverley. Call-out service available across Melbourne's Eastern Suburbs.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🔍</div>
+        <h4>Honest Assessments</h4>
+        <p>Clear quote before any work begins. No unnecessary parts, no inflated labour costs.</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ══════════════════════════════════════════
-     ABOUT
+     QUOTES & PRICING
 ══════════════════════════════════════════ -->
-<section class="section section-dark" id="about">
-  <div class="container about-inner">
-    <div class="about-text">
-      <span class="section-tag">Our Story</span>
-      <h2>Honest Repairs<br />Since 1989</h2>
-      <p>Service Scene has been serving Melbourne's Eastern Suburbs for over 35 years as an authorised service centre for audio and visual equipment through Tarnel Pty Ltd.</p>
-      <p>We're proud members of the Electronic Service Centres Association (ESCA) and authorised to repair and service products from leading brands including Panasonic, Toshiba and LG.</p>
-      <p>Our promise is simple: <strong>we'll always give you an honest assessment.</strong> We evaluate each job individually and only recommend repairs that make financial sense for you. No unnecessary work, no surprises.</p>
-      <div class="about-badges">
-        <div class="badge"><span>✓</span> ESCA Member</div>
-        <div class="badge"><span>✓</span> Authorised Service Centre</div>
-        <div class="badge"><span>✓</span> Est. 1989</div>
-      </div>
+<section class="section" id="quotes">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-label">Out-of-Warranty Repairs</p>
+      <h2>Quote &amp; Assessment Fees</h2>
+      <p class="section-sub">All out-of-warranty repairs require an assessment quote before work commences. Our fees are straightforward and transparent.</p>
     </div>
-    <div class="about-visual">
-      <div class="about-card-stack">
-        <div class="about-card ac1">
-          <div class="ac-icon">🛠️</div>
-          <div class="ac-body">
-            <strong>Expert Technicians</strong>
-            <span>Qualified &amp; experienced professionals</span>
-          </div>
+
+    <div class="quotes-grid">
+
+      <div class="quote-card">
+        <div class="quote-card-header">
+          <div class="quote-icon">📺</div>
+          <h3>Televisions &amp;<br />Audio Equipment</h3>
         </div>
-        <div class="about-card ac2">
-          <div class="ac-icon">📋</div>
-          <div class="ac-body">
-            <strong>Honest Assessment</strong>
-            <span>We tell you if a repair isn't worth it</span>
-          </div>
+        <div class="quote-price">
+          <span class="price-dollar">$</span>
+          <span class="price-amount">88</span>
+          <span class="price-cents">.00</span>
         </div>
-        <div class="about-card ac3">
-          <div class="ac-icon">🏅</div>
-          <div class="ac-body">
-            <strong>Genuine Parts</strong>
-            <span>OEM parts from authorised suppliers</span>
-          </div>
-        </div>
-        <div class="about-card ac4">
-          <div class="ac-icon">📍</div>
-          <div class="ac-body">
-            <strong>Local Business</strong>
-            <span>Proudly serving Eastern Melbourne</span>
-          </div>
-        </div>
+        <p class="price-label">Assessment Fee</p>
+        <ul class="quote-list">
+          <li>All TV brands and screen sizes</li>
+          <li>Amplifiers &amp; home theatre systems</li>
+          <li>Hi-fi and audio components</li>
+          <li>Fee credited toward repair cost</li>
+        </ul>
+        <a href="#contact" class="btn btn-dark btn-full">Book Assessment</a>
       </div>
+
+      <div class="quote-card">
+        <div class="quote-card-header">
+          <div class="quote-icon">🫙</div>
+          <h3>Microwaves &amp;<br />Vacuum Cleaners</h3>
+        </div>
+        <div class="quote-price">
+          <span class="price-dollar">$</span>
+          <span class="price-amount">77</span>
+          <span class="price-cents">.00</span>
+        </div>
+        <p class="price-label">Assessment Fee</p>
+        <ul class="quote-list">
+          <li>All microwave brands and sizes</li>
+          <li>Upright, barrel &amp; robotic vacuums</li>
+          <li>All major appliance brands</li>
+          <li>Fee credited toward repair cost</li>
+        </ul>
+        <a href="#contact" class="btn btn-dark btn-full">Book Assessment</a>
+      </div>
+
+      <div class="quote-card quote-card-callout">
+        <div class="callout-badge">Call-Out Service</div>
+        <div class="quote-card-header">
+          <div class="quote-icon">🚗</div>
+          <h3>We Come<br />to You</h3>
+        </div>
+        <div class="callout-rows">
+          <div class="callout-row">
+            <div class="callout-row-label">
+              <strong>Within 30km</strong>
+              <span>Mt Waverley &amp; surrounds</span>
+            </div>
+            <div class="callout-row-price">$198</div>
+          </div>
+          <div class="callout-separator"></div>
+          <div class="callout-row">
+            <div class="callout-row-label">
+              <strong>Outside 30km &amp; CBD</strong>
+              <span>Extended service area</span>
+            </div>
+            <div class="callout-row-price">$220</div>
+          </div>
+        </div>
+        <a href="tel:0398881844" class="btn btn-dark btn-full">📞 Call to Book</a>
+      </div>
+
+    </div>
+
+    <div class="quotes-note">
+      <p>💡 <strong>Note:</strong> Assessment fees apply to out-of-warranty items only. If your item is under manufacturer warranty, the assessment is free. All assessment fees are credited toward the final repair cost if you choose to proceed.</p>
     </div>
   </div>
 </section>
@@ -192,118 +271,20 @@
 <!-- ══════════════════════════════════════════
      FOR SALE
 ══════════════════════════════════════════ -->
-<section class="section" id="forsale">
+<section class="section section-gray" id="forsale">
   <div class="container">
     <div class="section-header">
-      <span class="section-tag">Pre-Owned Items</span>
+      <p class="section-label">Pre-Owned Items</p>
       <h2>For Sale</h2>
-      <p>Quality second-hand electronics and parts — tested and ready to go.</p>
+      <p class="section-sub">Quality second-hand electronics and parts — tested and ready to go. Updated regularly.</p>
     </div>
-    <div class="forsale-grid" id="forsale-grid">
-      <!-- items rendered by script.js -->
-    </div>
-    <div class="forsale-empty" id="forsale-empty" style="display:none">
-      <div class="empty-icon">📦</div>
-      <p>No items listed at the moment.<br />Check back soon!</p>
-    </div>
+
+    <div class="sale-grid" id="forsale-grid"></div>
+    <p id="forsale-empty" class="empty-msg" style="display:none">No items listed at the moment — check back soon.</p>
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════
-     CONTACT
-══════════════════════════════════════════ -->
-<section class="section section-dark" id="contact">
-  <div class="container contact-inner">
-    <div class="contact-info">
-      <span class="section-tag">Get in Touch</span>
-      <h2>Contact Us</h2>
-      <p>Bring your device in, or send us a message to arrange an assessment. We're based in Melbourne's Eastern Suburbs.</p>
-      <div class="contact-items">
-        <div class="contact-item">
-          <span class="ci-icon">📍</span>
-          <div>
-            <strong>Location</strong>
-            <span>Melbourne Eastern Suburbs, VIC</span>
-          </div>
-        </div>
-        <div class="contact-item">
-          <span class="ci-icon">🕐</span>
-          <div>
-            <strong>Hours</strong>
-            <span>Mon–Fri: 9am – 5pm</span>
-          </div>
-        </div>
-        <div class="contact-item">
-          <span class="ci-icon">🏢</span>
-          <div>
-            <strong>Company</strong>
-            <span>Tarnel Pty Ltd · ABN registered</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <form class="contact-form" id="contact-form">
-      <div class="form-row">
-        <div class="form-group">
-          <label for="cf-name">Name</label>
-          <input type="text" id="cf-name" placeholder="Your name" required />
-        </div>
-        <div class="form-group">
-          <label for="cf-phone">Phone</label>
-          <input type="tel" id="cf-phone" placeholder="Your phone number" />
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="cf-email">Email</label>
-        <input type="email" id="cf-email" placeholder="your@email.com" required />
-      </div>
-      <div class="form-group">
-        <label for="cf-device">Device / Item</label>
-        <input type="text" id="cf-device" placeholder="e.g. Samsung 55&quot; TV, LG washing machine" />
-      </div>
-      <div class="form-group">
-        <label for="cf-msg">Message</label>
-        <textarea id="cf-msg" rows="4" placeholder="Describe the problem or what you need…"></textarea>
-      </div>
-      <button type="submit" class="btn btn-primary btn-full">Send Enquiry</button>
-      <p class="form-note" id="form-success" style="display:none">✅ Thanks! We'll be in touch shortly.</p>
-    </form>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════
-     FOOTER
-══════════════════════════════════════════ -->
-<footer class="site-footer">
-  <div class="container footer-inner">
-    <div class="footer-brand">
-      <img src="images/logo.svg" alt="Service Scene" class="footer-logo" onerror="this.style.display='none'" />
-      <p>Authorised electronics repair centre<br />Melbourne Eastern Suburbs · Est. 1989</p>
-    </div>
-    <div class="footer-links">
-      <h4>Quick Links</h4>
-      <a href="#services">Services</a>
-      <a href="#about">About</a>
-      <a href="#forsale">For Sale</a>
-      <a href="#contact">Contact</a>
-    </div>
-    <div class="footer-links">
-      <h4>Authorised For</h4>
-      <span>Panasonic</span>
-      <span>Toshiba</span>
-      <span>LG</span>
-      <span>+ more brands</span>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <div class="container">
-      <span>© 2024 Service Scene (Tarnel Pty Ltd). All rights reserved.</span>
-      <span>ESCA Member · Melbourne, Australia</span>
-    </div>
-  </div>
-</footer>
-
-<!-- Item Detail Modal -->
+<!-- Item modal -->
 <div class="modal-overlay" id="item-modal" style="display:none">
   <div class="modal-box">
     <button class="modal-close" id="modal-close">✕</button>
@@ -311,14 +292,158 @@
       <img id="modal-img" src="" alt="" />
     </div>
     <div class="modal-body">
-      <span class="modal-badge" id="modal-condition"></span>
+      <span id="modal-condition" class="modal-badge"></span>
       <h3 id="modal-title"></h3>
       <p class="modal-price" id="modal-price"></p>
-      <p class="modal-desc" id="modal-desc"></p>
-      <a href="#contact" class="btn btn-primary" id="modal-enquire" onclick="document.getElementById('item-modal').style.display='none'">Enquire About This Item</a>
+      <p id="modal-desc"></p>
+      <a href="#contact" class="btn btn-dark" onclick="closeModal()">Enquire About This Item</a>
     </div>
   </div>
 </div>
+
+<!-- ══════════════════════════════════════════
+     CONTACT
+══════════════════════════════════════════ -->
+<section class="section" id="contact">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-label">Get in Touch</p>
+      <h2>Contact Us</h2>
+    </div>
+
+    <div class="contact-layout">
+
+      <div class="contact-info">
+        <div class="contact-info-card">
+          <div class="contact-detail">
+            <div class="contact-detail-icon">📍</div>
+            <div>
+              <strong>Our Address</strong>
+              <p>61 Wadham Pde<br />Mt Waverley VIC 3149</p>
+            </div>
+          </div>
+          <div class="contact-detail">
+            <div class="contact-detail-icon">📞</div>
+            <div>
+              <strong>Phone</strong>
+              <p><a href="tel:0398881844">03 9888 1844</a></p>
+            </div>
+          </div>
+          <div class="contact-detail">
+            <div class="contact-detail-icon">✉️</div>
+            <div>
+              <strong>Email</strong>
+              <p><a href="mailto:info@servicescene.com.au">info@servicescene.com.au</a></p>
+            </div>
+          </div>
+          <div class="contact-detail">
+            <div class="contact-detail-icon">🕐</div>
+            <div>
+              <strong>Trading Hours</strong>
+              <p>Monday – Friday: 9:00am – 5:00pm<br />Saturday – Sunday: Closed</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-map">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3148.9508!2d145.1168!3d-37.8764!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad66acf78a75ced%3A0x0!2s61+Wadham+Parade%2C+Mount+Waverley+VIC+3149!5e0!3m2!1sen!2sau!4v1"
+            width="100%" height="240" style="border:0;border-radius:12px;" allowfullscreen loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+      </div>
+
+      <div class="contact-form-wrap">
+        <form class="contact-form" id="contact-form">
+          <div id="form-success" class="form-success" style="display:none">
+            ✅ Thanks! We'll be in touch within 1 business day.
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="cf-name">Your Name *</label>
+              <input type="text" id="cf-name" placeholder="John Smith" required />
+            </div>
+            <div class="form-group">
+              <label for="cf-phone">Phone Number</label>
+              <input type="tel" id="cf-phone" placeholder="04xx xxx xxx" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="cf-email">Email Address *</label>
+            <input type="email" id="cf-email" placeholder="you@example.com" required />
+          </div>
+          <div class="form-group">
+            <label for="cf-subject">Subject</label>
+            <select id="cf-subject">
+              <option>General Enquiry</option>
+              <option>Book a Repair</option>
+              <option>Quote Request</option>
+              <option>Call-out Service</option>
+              <option>For Sale Item Enquiry</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="cf-message">Message *</label>
+            <textarea id="cf-message" rows="5" placeholder="Describe your appliance, the fault, brand/model if known…" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-dark btn-full">Send Message</button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════ -->
+<footer class="site-footer">
+  <div class="footer-inner">
+
+    <div class="footer-brand">
+      <img src="images/logo.svg" alt="Service Scene" onerror="this.src='images/ss-logo.png'" />
+      <p>Melbourne's trusted electronics repair specialist since 1989. Honest assessments, quality repairs.</p>
+      <p class="footer-acn">ACN 087 486 995</p>
+    </div>
+
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#services">TV &amp; Monitor Repair</a></li>
+        <li><a href="#services">Audio Equipment</a></li>
+        <li><a href="#services">Microwave Repair</a></li>
+        <li><a href="#services">Vacuum Cleaners</a></li>
+        <li><a href="#services">White Goods</a></li>
+        <li><a href="#services">Remote Controls</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Information</h4>
+      <ul>
+        <li><a href="#quotes">Quote &amp; Assessment Fees</a></li>
+        <li><a href="#forsale">Items for Sale</a></li>
+        <li><a href="#contact">Contact Us</a></li>
+        <li><a href="admin.html">Staff Login</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li>📍 61 Wadham Pde, Mt Waverley VIC 3149</li>
+        <li>📞 <a href="tel:0398881844">03 9888 1844</a></li>
+        <li>✉️ <a href="mailto:info@servicescene.com.au">info@servicescene.com.au</a></li>
+        <li>🕐 Mon–Fri: 9am – 5pm</li>
+      </ul>
+    </div>
+
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Service Scene Electronic Servicing. All rights reserved. · ACN 087 486 995 · Mt Waverley, Melbourne VIC</p>
+  </div>
+</footer>
 
 <script src="script.js"></script>
 </body>
