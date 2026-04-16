@@ -1,26 +1,27 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
 
-  <!-- LG red background circle -->
+  <!-- Red background -->
   <circle cx="50" cy="50" r="50" fill="#A50034"/>
 
-  <!-- ── L ──────────────────────────────────────
-       Vertical stroke: x=10..19, y=18..65
-       Horizontal base: x=10..36, y=57..65        -->
-  <rect x="10" y="18" width="10" height="48" fill="white"/>
-  <rect x="10" y="57" width="28" height="9"  fill="white"/>
+  <!-- ── Inner arc (forms the G outline and "face" border) ───────────────
+       Centre (52,52), radius 30.
+       Sweeps clockwise ~310° — start at right (82,52), end at upper-right.
+       Opening angle ≈ 50° (upper-right, ~310° SVG clockwise from 0°).
+       End point: x=52+30·cos(-50°)=71.3, y=52+30·sin(-50°)=29.0
+       large-arc-flag=1, sweep-flag=1 (clockwise)                          -->
+  <path d="M 82 52 A 30 30 0 1 1 71.3 29"
+        stroke="white" stroke-width="5" fill="none"
+        stroke-linecap="round"/>
 
-  <!-- ── G ──────────────────────────────────────
-       Strategy: white outer disc → red inner disc (ring) →
-       red rect erases top-right quadrant (the C-opening) →
-       white rect adds the inward horizontal arm
-       G centre: (67, 50)  outer r=23  inner r=15            -->
-  <circle cx="67" cy="50" r="23" fill="white"/>
-  <circle cx="67" cy="50" r="15" fill="#A50034"/>
+  <!-- ── G arm ── horizontal bar extending inward from right edge of arc -->
+  <rect x="62" y="49.5" width="20" height="5" fill="white"/>
 
-  <!-- erase top-right: covers x=55..92, y=27..50 -->
-  <rect x="55" y="27" width="37" height="23" fill="#A50034"/>
+  <!-- ── Dot (the "nose" of the LG face design) -->
+  <circle cx="32" cy="30" r="4" fill="white"/>
 
-  <!-- horizontal arm at centre: x=67..90, y=46..55 -->
-  <rect x="67" y="46" width="23" height="9" fill="white"/>
+  <!-- ── L ──────────────────────────────────────────
+       Vertical stroke + short horizontal base       -->
+  <rect x="34" y="37" width="6"  height="26" fill="white"/>
+  <rect x="34" y="57" width="18" height="6"  fill="white"/>
 
 </svg>
