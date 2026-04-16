@@ -300,7 +300,7 @@ ul  { list-style: none; }
 }
 .hero-stat strong { font-size: 1.3rem; font-weight: 800; color: #fff; }
 .hero-stat span   { font-size: .72rem; color: rgba(255,255,255,.6); margin-top: 2px; text-transform: uppercase; letter-spacing: .8px; text-align: center; }
-.hero-lg-logo     { width: 48px; height: 48px; border-radius: 50%; box-shadow: 0 2px 12px rgba(0,0,0,.3); display: block; }
+.hero-lg-logo     { height: 40px; width: auto; display: block; }
 .hero-stat-divider { width: 1px; height: 36px; background: rgba(255,255,255,.2); flex-shrink: 0; }
 
 .hero-lg-badge {
