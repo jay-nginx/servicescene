@@ -8,7 +8,17 @@
       "Bash(npm install:*)",
       "Bash(xargs kill:*)",
       "Bash(git init:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git branch:*)",
+      "Bash(git commit:*)",
+      "Bash(gh repo:*)",
+      "Bash(git push:*)",
+      "mcp__Claude_in_Chrome__tabs_context_mcp",
+      "WebFetch(domain:woolleys.com.au)",
+      "Bash(curl -s https://woolleys.com.au/)",
+      "Bash(TOKEN=\"dd16e7bf8f0f46251197579e3ab2c9df63176d69397cf2ac953cec48a08ac101\" curl -s -X POST http://localhost:3456/api/announcement -H \"Content-Type: application/json\" -H \"Authorization: Bearer $TOKEN\" -d '{\"\"\"\"title\"\"\"\":\"\"\"\"Easter Holiday Hours\"\"\"\",\"\"\"\"body\"\"\"\":\"\"\"\"We will be closed Good Friday \\(18 Apr\\) and Easter Monday \\(21 Apr\\).\\\\n\\\\nWe reopen Tuesday 22 April at 9:30am.\\\\n\\\\nHappy Easter from the Service Scene team! 🐣\"\"\"\",\"\"\"\"badge\"\"\"\":\"\"\"\"🐣 Easter Notice\"\"\"\",\"\"\"\"buttonLabel\"\"\"\":\"\"\"\"Got it\"\"\"\",\"\"\"\"active\"\"\"\":true}')",
+      "Bash(python3 -m json.tool)",
+      "Bash(curl -s http://localhost:59210/api/announcement)"
     ]
   }
 }

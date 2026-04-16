@@ -134,7 +134,70 @@ function closeModal() {
   document.body.style.overflow = '';
 }
 
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeModal(); closeAnnouncement(); }
+});
+
+// ══════════════════════════════════════════
+//  ANNOUNCEMENT POPUP
+// ══════════════════════════════════════════
+const ANNOUNCE_SESSION_KEY = 'ss_announcement_dismissed';
+
+function closeAnnouncement() {
+  const overlay = document.getElementById('announcement-overlay');
+  if (overlay) overlay.style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+async function loadAnnouncement() {
+  // Don't show again if already dismissed this session
+  if (sessionStorage.getItem(ANNOUNCE_SESSION_KEY)) return;
+
+  try {
+    const res = await fetch('/api/announcement');
+    if (!res.ok) return;
+    const a = await res.json();
+    if (!a) return;
+
+    // Populate popup
+    const titleEl  = document.getElementById('announcement-title');
+    const bodyEl   = document.getElementById('announcement-body');
+    const badgeEl  = document.getElementById('announcement-badge');
+    const badgeWrap = document.getElementById('announcement-badge-wrap');
+    const btnEl    = document.getElementById('announcement-btn');
+    const overlay  = document.getElementById('announcement-overlay');
+
+    titleEl.textContent  = a.title;
+    // Allow simple line breaks in body
+    bodyEl.innerHTML = escHtml(a.body).replace(/\n/g, '<br/>');
+    btnEl.textContent = a.buttonLabel || 'Got it';
+
+    if (a.badge) {
+      badgeEl.textContent     = a.badge;
+      badgeWrap.style.display = 'block';
+    } else {
+      badgeWrap.style.display = 'none';
+    }
+
+    // Wire up close actions
+    const dismiss = () => {
+      sessionStorage.setItem(ANNOUNCE_SESSION_KEY, '1');
+      closeAnnouncement();
+    };
+    document.getElementById('announcement-close').onclick = dismiss;
+    btnEl.onclick = dismiss;
+    overlay.onclick = e => { if (e.target === overlay) dismiss(); };
+
+    // Show with a short delay so page has settled
+    setTimeout(() => {
+      overlay.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }, 800);
+
+  } catch (err) {
+    // Silently ignore — announcement is optional
+  }
+}
 
 // ── Load items from API ──
 async function loadForSale() {
@@ -165,3 +228,4 @@ async function loadForSale() {
 
 // Init
 loadForSale();
+loadAnnouncement();

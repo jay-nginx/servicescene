@@ -123,6 +123,52 @@
       <p id="admin-empty" style="color:#94a3b8;font-size:.9rem;display:none">No items listed yet. Add one above.</p>
     </div>
 
+    <!-- ── Announcement Popup ── -->
+    <div class="admin-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+        <h3 style="margin:0">📢 Website Announcement Popup</h3>
+        <div id="announce-status-wrap" style="display:none">
+          <span id="announce-status-badge"></span>
+          <button id="announce-toggle-btn" class="btn btn-secondary" style="font-size:.82rem;padding:7px 16px;margin-left:10px"></button>
+          <button id="announce-delete-btn" class="btn btn-danger" style="margin-left:6px">🗑 Remove</button>
+        </div>
+      </div>
+
+      <!-- Live preview of current announcement -->
+      <div id="announce-current" style="display:none;margin-bottom:24px">
+        <p style="font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#64748b;margin-bottom:10px">Currently Saved</p>
+        <div class="announce-preview" id="announce-preview-box"></div>
+      </div>
+
+      <form id="announce-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="an-badge">Badge Label <span style="font-weight:400;color:#94a3b8">(optional — e.g. "🎄 Holiday Notice")</span></label>
+            <input type="text" id="an-badge" placeholder="e.g. 🎄 Holiday Hours" maxlength="60" />
+          </div>
+          <div class="form-group">
+            <label for="an-btn-label">Button Label <span style="font-weight:400;color:#94a3b8">(default: "Got it")</span></label>
+            <input type="text" id="an-btn-label" placeholder="Got it" maxlength="40" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="an-title">Title *</label>
+          <input type="text" id="an-title" placeholder="e.g. Christmas Closing Hours" required maxlength="100" />
+        </div>
+        <div class="form-group">
+          <label for="an-body">Message *</label>
+          <textarea id="an-body" rows="5" placeholder="e.g. We will be closed from 24 December and reopen on 2 January. Wishing all our customers a wonderful holiday season!" required></textarea>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <button type="submit" class="btn btn-primary" id="announce-save-btn">📢 Save &amp; Activate Popup</button>
+          <label class="toggle-wrap">
+            <input type="checkbox" id="an-active" checked />
+            <span>Activate immediately</span>
+          </label>
+        </div>
+      </form>
+    </div>
+
     <!-- ── Change Password ── -->
     <div class="admin-card">
       <h3>Change Password</h3>
@@ -544,6 +590,104 @@ function showToast(msg) {
     );
   });
 });
+
+// ── Announcement management ──────────────────────────
+async function loadAnnouncement() {
+  try {
+    const a = await api('GET', '/api/announcement/admin');
+    renderAnnouncementAdmin(a);
+  } catch { renderAnnouncementAdmin(null); }
+}
+
+function renderAnnouncementAdmin(a) {
+  const statusWrap  = document.getElementById('announce-status-wrap');
+  const current     = document.getElementById('announce-current');
+  const preview     = document.getElementById('announce-preview-box');
+  const toggleBtn   = document.getElementById('announce-toggle-btn');
+  const statusBadge = document.getElementById('announce-status-badge');
+
+  if (!a) {
+    statusWrap.style.display = 'none';
+    current.style.display    = 'none';
+    return;
+  }
+
+  // Show status bar
+  statusWrap.style.display = 'flex';
+  statusWrap.style.alignItems = 'center';
+
+  statusBadge.textContent = a.active ? '🟢 Live' : '⏸ Paused';
+  statusBadge.style.cssText = `font-size:.8rem;font-weight:700;padding:4px 12px;border-radius:9999px;background:${a.active ? '#dcfce7' : '#f1f5f9'};color:${a.active ? '#166534' : '#475569'}`;
+
+  toggleBtn.textContent = a.active ? 'Pause Popup' : 'Activate Popup';
+
+  // Show preview
+  current.style.display = 'block';
+  preview.innerHTML = `
+    ${a.badge ? `<div style="margin-bottom:8px"><span style="background:#1565c0;color:#fff;font-size:.72rem;font-weight:700;padding:4px 14px;border-radius:9999px;letter-spacing:.5px">${escHtml(a.badge)}</span></div>` : ''}
+    <div style="font-size:1.05rem;font-weight:700;margin-bottom:6px;color:#0f1f3d">${escHtml(a.title)}</div>
+    <div style="font-size:.85rem;color:#475569;line-height:1.6">${escHtml(a.body).replace(/\n/g,'<br/>')}</div>
+    <div style="margin-top:10px;font-size:.75rem;color:#94a3b8">Button label: "${escHtml(a.buttonLabel || 'Got it')}"</div>
+  `;
+
+  // Pre-fill form with current values for easy editing
+  document.getElementById('an-title').value     = a.title     || '';
+  document.getElementById('an-body').value      = a.body      || '';
+  document.getElementById('an-badge').value     = a.badge     || '';
+  document.getElementById('an-btn-label').value = a.buttonLabel || '';
+  document.getElementById('an-active').checked  = a.active !== false;
+}
+
+// Save announcement
+document.getElementById('announce-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = document.getElementById('announce-save-btn');
+  btn.disabled = true; btn.textContent = 'Saving…';
+
+  try {
+    const a = await api('POST', '/api/announcement', {
+      title:       document.getElementById('an-title').value,
+      body:        document.getElementById('an-body').value,
+      badge:       document.getElementById('an-badge').value,
+      buttonLabel: document.getElementById('an-btn-label').value || 'Got it',
+      active:      document.getElementById('an-active').checked
+    });
+    renderAnnouncementAdmin(a);
+    showToast(a.active ? '✅ Popup is now live on the website!' : '✅ Popup saved (paused).');
+  } catch (err) {
+    showToast('Error: ' + err.message);
+  } finally {
+    btn.disabled = false; btn.textContent = '📢 Save & Activate Popup';
+  }
+});
+
+// Toggle active
+document.getElementById('announce-toggle-btn').addEventListener('click', async () => {
+  try {
+    const a = await api('PATCH', '/api/announcement/toggle');
+    renderAnnouncementAdmin(a);
+    showToast(a.active ? '🟢 Popup is now live!' : '⏸ Popup paused.');
+  } catch (err) { showToast('Error: ' + err.message); }
+});
+
+// Delete announcement
+document.getElementById('announce-delete-btn').addEventListener('click', async () => {
+  if (!confirm('Remove the announcement popup entirely?')) return;
+  try {
+    await api('DELETE', '/api/announcement');
+    renderAnnouncementAdmin(null);
+    document.getElementById('an-title').value = '';
+    document.getElementById('an-body').value  = '';
+    document.getElementById('an-badge').value = '';
+    document.getElementById('an-btn-label').value = '';
+    showToast('🗑 Announcement removed.');
+  } catch (err) { showToast('Error: ' + err.message); }
+});
+
+// Load on admin panel show
+const _origShowAdmin = showAdmin;
+showAdmin = function() { _origShowAdmin(); loadAnnouncement(); };
+if (isLoggedIn()) loadAnnouncement();
 </script>
 </body>
 </html>

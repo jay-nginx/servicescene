@@ -13,9 +13,10 @@ const app  = express();
 const PORT = process.env.PORT || 3456;
 
 // ── Paths ──────────────────────────────────────────
-const DB_DIR     = path.join(__dirname, 'db');
-const ITEMS_PATH = path.join(DB_DIR, 'items.json');
-const CFG_PATH   = path.join(DB_DIR, 'config.json');
+const DB_DIR       = path.join(__dirname, 'db');
+const ITEMS_PATH   = path.join(DB_DIR, 'items.json');
+const CFG_PATH     = path.join(DB_DIR, 'config.json');
+const ANNOUNCE_PATH = path.join(DB_DIR, 'announcement.json');
 
 // Ensure db/ directory exists
 if (!fs.existsSync(DB_DIR)) fs.mkdirSync(DB_DIR, { recursive: true });
@@ -47,6 +48,9 @@ function getConfig() {
   return cfg;
 }
 function saveConfig(cfg) { writeJSON(CFG_PATH, cfg); }
+
+function getAnnouncement()     { return readJSON(ANNOUNCE_PATH, null); }
+function saveAnnouncement(data) { writeJSON(ANNOUNCE_PATH, data); }
 
 function nextId() { return Date.now() + Math.floor(Math.random() * 9999); }
 
@@ -206,6 +210,57 @@ app.delete('/api/items/:id', requireAuth, (req, res) => {
   if (!found) return res.status(404).json({ error: 'Item not found' });
   saveItems(items.filter(i => i.id !== id));
   console.log(`🗑  Deleted item id ${id}`);
+  res.json({ ok: true });
+});
+
+// ══════════════════════════════════════════════════
+//  ANNOUNCEMENT ROUTES
+// ══════════════════════════════════════════════════
+
+// GET /api/announcement  – public, returns active announcement or null
+app.get('/api/announcement', (req, res) => {
+  const a = getAnnouncement();
+  if (!a || !a.active) return res.json(null);
+  res.json(a);
+});
+
+// GET /api/announcement/admin  – admin, returns announcement regardless of active state
+app.get('/api/announcement/admin', requireAuth, (req, res) => {
+  res.json(getAnnouncement());
+});
+
+// POST /api/announcement  – admin: create or update
+app.post('/api/announcement', requireAuth, (req, res) => {
+  const { title, body, active, badge, buttonLabel } = req.body || {};
+  if (!title || !title.trim()) return res.status(400).json({ error: 'Title is required' });
+  if (!body  || !body.trim())  return res.status(400).json({ error: 'Body is required' });
+  const a = {
+    title:       title.trim(),
+    body:        body.trim(),
+    badge:       badge       || '',
+    buttonLabel: buttonLabel || 'Got it',
+    active:      active !== false,
+    updatedAt:   new Date().toISOString()
+  };
+  saveAnnouncement(a);
+  console.log(`📢 Announcement saved: "${a.title}" (active: ${a.active})`);
+  res.json(a);
+});
+
+// PATCH /api/announcement/toggle  – admin: flip active flag
+app.patch('/api/announcement/toggle', requireAuth, (req, res) => {
+  const a = getAnnouncement();
+  if (!a) return res.status(404).json({ error: 'No announcement set' });
+  a.active = !a.active;
+  a.updatedAt = new Date().toISOString();
+  saveAnnouncement(a);
+  res.json(a);
+});
+
+// DELETE /api/announcement  – admin: remove entirely
+app.delete('/api/announcement', requireAuth, (req, res) => {
+  saveAnnouncement(null);
+  console.log('🗑  Announcement cleared');
   res.json({ ok: true });
 });
 
