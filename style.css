@@ -302,6 +302,19 @@ ul  { list-style: none; }
 .hero-stat span   { font-size: .75rem; color: rgba(255,255,255,.6); margin-top: 2px; text-transform: uppercase; letter-spacing: .8px; }
 .hero-stat-divider { width: 1px; height: 36px; background: rgba(255,255,255,.2); }
 
+.hero-lg-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #c8a84b, #f0d060, #c8a84b);
+  color: #1a1000;
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .5px;
+  padding: 8px 22px;
+  border-radius: 9999px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 12px rgba(200,168,75,.4);
+}
+
 /* ── Section Base ──────────────────────────────────── */
 .section { padding: 88px 0; }
 .section-gray { background: var(--gray-light); }
@@ -393,6 +406,26 @@ ul  { list-style: none; }
 }
 
 /* ── Why Cards ─────────────────────────────────────── */
+.lg-banner {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: linear-gradient(135deg, rgba(200,168,75,.15), rgba(240,208,96,.08));
+  border: 1px solid rgba(200,168,75,.35);
+  border-radius: var(--radius);
+  padding: 24px 28px;
+  margin-bottom: 36px;
+}
+.lg-banner-icon { font-size: 2.4rem; flex-shrink: 0; }
+.lg-banner strong {
+  display: block;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #f0d060;
+  margin-bottom: 6px;
+}
+.lg-banner p { font-size: .88rem; color: rgba(255,255,255,.65); line-height: 1.6; margin: 0; }
+
 .why-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
