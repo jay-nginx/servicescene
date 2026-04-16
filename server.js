@@ -337,13 +337,17 @@ app.delete('/api/announcement', requireAuth, (req, res) => {
 //   SMTP_PORT  = 465
 //   SMTP_USER  = info@servicescene.com.au
 //   SMTP_PASS  = (your email account password)
+const smtpPort = parseInt(process.env.SMTP_PORT || '465');
 const transporter = nodemailer.createTransport({
   host:   process.env.SMTP_HOST || 'localhost',
-  port:   parseInt(process.env.SMTP_PORT || '465'),
-  secure: parseInt(process.env.SMTP_PORT || '465') === 465,
+  port:   smtpPort,
+  secure: smtpPort === 465,
   auth: {
     user: process.env.SMTP_USER || '',
     pass: process.env.SMTP_PASS || ''
+  },
+  tls: {
+    rejectUnauthorized: false   // allow self-signed certs (common on cPanel)
   }
 });
 
@@ -396,7 +400,11 @@ Sent via servicescene.com.au contact form
     res.json({ ok: true });
   } catch (err) {
     console.error('❌ Failed to send contact email:', err.message);
-    res.status(500).json({ error: 'Failed to send message. Please call us directly on 03 9888 1844.' });
+    console.error('❌ SMTP config — host:', process.env.SMTP_HOST, 'port:', process.env.SMTP_PORT, 'user:', process.env.SMTP_USER);
+    res.status(500).json({
+      error: 'Failed to send message. Please call us directly on 03 9888 1844.',
+      detail: err.message   // visible in browser console for debugging
+    });
   }
 });
 
