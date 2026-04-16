@@ -49,8 +49,50 @@ function getConfig() {
 }
 function saveConfig(cfg) { writeJSON(CFG_PATH, cfg); }
 
-function getAnnouncement()     { return readJSON(ANNOUNCE_PATH, null); }
+function getAnnouncement()      { return readJSON(ANNOUNCE_PATH, null); }
 function saveAnnouncement(data) { writeJSON(ANNOUNCE_PATH, data); }
+
+// ── Business day helpers ────────────────────────────
+const BUSINESS_DAYS = 5;
+
+// Returns a Date that is `days` business days after `startDate`
+function addBusinessDays(startDate, days) {
+  const result = new Date(startDate);
+  let added = 0;
+  while (added < days) {
+    result.setDate(result.getDate() + 1);
+    const dow = result.getDay();
+    if (dow !== 0 && dow !== 6) added++; // skip Sat(6) & Sun(0)
+  }
+  return result;
+}
+
+// Returns how many business days remain between now and expiresAt
+function businessDaysRemaining(expiresAt) {
+  const now    = new Date(); now.setHours(0,0,0,0);
+  const expiry = new Date(expiresAt); expiry.setHours(0,0,0,0);
+  let count = 0;
+  const cursor = new Date(now);
+  while (cursor < expiry) {
+    cursor.setDate(cursor.getDate() + 1);
+    const dow = cursor.getDay();
+    if (dow !== 0 && dow !== 6) count++;
+  }
+  return count;
+}
+
+// Check and auto-pause an announcement if its 5-day window has elapsed
+function checkAndAutoExpire(a) {
+  if (!a || !a.active || !a.expiresAt) return a;
+  if (new Date() >= new Date(a.expiresAt)) {
+    a.active    = false;
+    a.autoExpired = true;
+    a.updatedAt = new Date().toISOString();
+    saveAnnouncement(a);
+    console.log(`⏰ Announcement auto-paused after 5 business days: "${a.title}"`);
+  }
+  return a;
+}
 
 function nextId() { return Date.now() + Math.floor(Math.random() * 9999); }
 
@@ -217,16 +259,19 @@ app.delete('/api/items/:id', requireAuth, (req, res) => {
 //  ANNOUNCEMENT ROUTES
 // ══════════════════════════════════════════════════
 
-// GET /api/announcement  – public, returns active announcement or null
+// GET /api/announcement  – public, returns active announcement or null (auto-expires if needed)
 app.get('/api/announcement', (req, res) => {
-  const a = getAnnouncement();
+  let a = getAnnouncement();
+  a = checkAndAutoExpire(a);
   if (!a || !a.active) return res.json(null);
   res.json(a);
 });
 
 // GET /api/announcement/admin  – admin, returns announcement regardless of active state
 app.get('/api/announcement/admin', requireAuth, (req, res) => {
-  res.json(getAnnouncement());
+  let a = getAnnouncement();
+  a = checkAndAutoExpire(a); // also auto-expire when admin checks
+  res.json(a);
 });
 
 // POST /api/announcement  – admin: create or update
@@ -234,25 +279,42 @@ app.post('/api/announcement', requireAuth, (req, res) => {
   const { title, body, active, badge, buttonLabel } = req.body || {};
   if (!title || !title.trim()) return res.status(400).json({ error: 'Title is required' });
   if (!body  || !body.trim())  return res.status(400).json({ error: 'Body is required' });
+
+  const isActive   = active !== false;
+  const now        = new Date();
+  const expiresAt  = isActive ? addBusinessDays(now, BUSINESS_DAYS).toISOString() : null;
+
   const a = {
-    title:       title.trim(),
-    body:        body.trim(),
-    badge:       badge       || '',
-    buttonLabel: buttonLabel || 'Got it',
-    active:      active !== false,
-    updatedAt:   new Date().toISOString()
+    title:        title.trim(),
+    body:         body.trim(),
+    badge:        badge       || '',
+    buttonLabel:  buttonLabel || 'Got it',
+    active:       isActive,
+    activatedAt:  isActive ? now.toISOString() : null,
+    expiresAt,
+    autoExpired:  false,
+    updatedAt:    now.toISOString()
   };
   saveAnnouncement(a);
-  console.log(`📢 Announcement saved: "${a.title}" (active: ${a.active})`);
+  console.log(`📢 Announcement saved: "${a.title}" (active: ${a.active}, expires: ${a.expiresAt})`);
   res.json(a);
 });
 
-// PATCH /api/announcement/toggle  – admin: flip active flag
+// PATCH /api/announcement/toggle  – admin: flip active flag, reset expiry if re-activating
 app.patch('/api/announcement/toggle', requireAuth, (req, res) => {
   const a = getAnnouncement();
   if (!a) return res.status(404).json({ error: 'No announcement set' });
+
   a.active = !a.active;
   a.updatedAt = new Date().toISOString();
+
+  if (a.active) {
+    // Re-activating: grant a fresh 5-business-day window
+    a.activatedAt  = a.updatedAt;
+    a.expiresAt    = addBusinessDays(new Date(), BUSINESS_DAYS).toISOString();
+    a.autoExpired  = false;
+  }
+
   saveAnnouncement(a);
   res.json(a);
 });

@@ -599,6 +599,21 @@ async function loadAnnouncement() {
   } catch { renderAnnouncementAdmin(null); }
 }
 
+function businessDaysRemaining(expiresAt) {
+  if (!expiresAt) return null;
+  const now    = new Date(); now.setHours(0,0,0,0);
+  const expiry = new Date(expiresAt); expiry.setHours(0,0,0,0);
+  if (now >= expiry) return 0;
+  let count = 0;
+  const cursor = new Date(now);
+  while (cursor < expiry) {
+    cursor.setDate(cursor.getDate() + 1);
+    const dow = cursor.getDay();
+    if (dow !== 0 && dow !== 6) count++;
+  }
+  return count;
+}
+
 function renderAnnouncementAdmin(a) {
   const statusWrap  = document.getElementById('announce-status-wrap');
   const current     = document.getElementById('announce-current');
@@ -616,18 +631,35 @@ function renderAnnouncementAdmin(a) {
   statusWrap.style.display = 'flex';
   statusWrap.style.alignItems = 'center';
 
-  statusBadge.textContent = a.active ? '🟢 Live' : '⏸ Paused';
+  const daysLeft  = businessDaysRemaining(a.expiresAt);
+  const expiryStr = a.expiresAt
+    ? new Date(a.expiresAt).toLocaleDateString('en-AU', { weekday:'short', day:'numeric', month:'short', year:'numeric' })
+    : null;
+
+  let statusText = a.active ? '🟢 Live' : (a.autoExpired ? '⏰ Auto-paused' : '⏸ Paused');
+  statusBadge.textContent = statusText;
   statusBadge.style.cssText = `font-size:.8rem;font-weight:700;padding:4px 12px;border-radius:9999px;background:${a.active ? '#dcfce7' : '#f1f5f9'};color:${a.active ? '#166534' : '#475569'}`;
 
   toggleBtn.textContent = a.active ? 'Pause Popup' : 'Activate Popup';
 
   // Show preview
   current.style.display = 'block';
+  const expiryInfo = a.active && expiryStr
+    ? `<div style="margin-top:12px;padding:8px 12px;background:#fef9c3;border:1px solid #fde047;border-radius:8px;font-size:.78rem;color:#854d0e">
+        ⏰ <strong>Auto-pauses after 5 business days</strong> — on <strong>${expiryStr}</strong>${daysLeft !== null ? ` (${daysLeft} business day${daysLeft !== 1 ? 's' : ''} remaining)` : ''}
+       </div>`
+    : a.autoExpired
+    ? `<div style="margin-top:12px;padding:8px 12px;background:#fee2e2;border:1px solid #fca5a5;border-radius:8px;font-size:.78rem;color:#991b1b">
+        ⏰ <strong>Auto-paused</strong> — 5 business days elapsed. Re-activate to get a fresh 5-day window.
+       </div>`
+    : '';
+
   preview.innerHTML = `
     ${a.badge ? `<div style="margin-bottom:8px"><span style="background:#1565c0;color:#fff;font-size:.72rem;font-weight:700;padding:4px 14px;border-radius:9999px;letter-spacing:.5px">${escHtml(a.badge)}</span></div>` : ''}
     <div style="font-size:1.05rem;font-weight:700;margin-bottom:6px;color:#0f1f3d">${escHtml(a.title)}</div>
     <div style="font-size:.85rem;color:#475569;line-height:1.6">${escHtml(a.body).replace(/\n/g,'<br/>')}</div>
-    <div style="margin-top:10px;font-size:.75rem;color:#94a3b8">Button label: "${escHtml(a.buttonLabel || 'Got it')}"</div>
+    <div style="margin-top:8px;font-size:.75rem;color:#94a3b8">Button label: "${escHtml(a.buttonLabel || 'Got it')}"</div>
+    ${expiryInfo}
   `;
 
   // Pre-fill form with current values for easy editing
