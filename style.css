@@ -426,6 +426,74 @@ ul  { list-style: none; }
 }
 .lg-banner p { font-size: .88rem; color: rgba(255,255,255,.65); line-height: 1.6; margin: 0; }
 
+/* Walk-in banner */
+.walkin-banner {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: var(--radius);
+  padding: 24px 28px;
+  margin-bottom: 36px;
+}
+.walkin-banner strong {
+  display: block;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 6px;
+}
+.walkin-banner p { font-size: .88rem; color: rgba(255,255,255,.65); line-height: 1.6; margin: 0; }
+
+/* Walk-in tag on service cards */
+.walkin-tag {
+  display: inline-block;
+  margin-top: 14px;
+  background: #dcfce7;
+  color: #166534;
+  font-size: .75rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  letter-spacing: .3px;
+}
+
+/* Expandable service note */
+.service-note {
+  margin-top: 14px;
+  border-top: 1px solid var(--gray-mid);
+  padding-top: 12px;
+}
+.service-note summary {
+  cursor: pointer;
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--blue);
+  list-style: none;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  line-height: 1.4;
+  transition: color .15s;
+}
+.service-note summary::-webkit-details-marker { display: none; }
+.service-note summary::marker { display: none; }
+.service-note summary:hover { color: #0d47a1; }
+.service-note[open] summary { margin-bottom: 12px; }
+.service-note-body {
+  background: var(--blue-light);
+  border: 1px solid #bfdbfe;
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  font-size: .83rem;
+  line-height: 1.65;
+  color: #1e3a8a;
+}
+.service-note-body p + p { margin-top: 8px; }
+.service-note-body a { color: var(--blue); text-decoration: underline; }
+.service-note-body a:hover { color: #0d47a1; }
+
 .why-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
