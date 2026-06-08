@@ -15,8 +15,7 @@
 ══════════════════════════════════════════ -->
 <div id="login-screen" class="login-wrap">
   <div class="login-box">
-    <img src="images/logo.svg" alt="Service Scene" class="login-logo"
-         onerror="this.style.display='none'" />
+    <img src="images/logo-new.png" alt="Service Scene" class="login-logo" />
     <h2>Admin Login</h2>
     <p>Service Scene · Items Management</p>
     <div id="login-error" class="error-msg" style="display:none">Incorrect password. Try again.</div>
@@ -40,7 +39,7 @@
 
   <div class="admin-topbar">
     <div style="display:flex;align-items:center;gap:16px">
-      <img src="images/logo.svg" alt="Service Scene" style="height:32px;object-fit:contain" onerror="this.style.display='none'" />
+      <img src="images/logo-new.png" alt="Service Scene" style="height:32px;object-fit:contain" />
       <strong>Admin Panel</strong>
     </div>
     <div style="display:flex;align-items:center;gap:16px">
@@ -169,6 +168,43 @@
       </form>
     </div>
 
+    <!-- ── Trading Hours ── -->
+    <div class="admin-card">
+      <h3>🕐 Trading Hours</h3>
+      <p style="font-size:.85rem;color:#64748b;margin-bottom:20px">Changes update the topbar and contact section on the website immediately.</p>
+      <form id="hours-form">
+        <div class="hours-grid">
+          <div class="hours-header">Day</div>
+          <div class="hours-header">Open?</div>
+          <div class="hours-header">From</div>
+          <div class="hours-header">To</div>
+          <script>
+            (function() {
+              const days = [
+                ['monday','Monday'],['tuesday','Tuesday'],['wednesday','Wednesday'],
+                ['thursday','Thursday'],['friday','Friday'],['saturday','Saturday'],['sunday','Sunday']
+              ];
+              days.forEach(([key, label]) => {
+                document.write(`
+                  <div class="hours-day-label">${label}</div>
+                  <div class="hours-toggle-wrap">
+                    <label class="toggle-wrap">
+                      <input type="checkbox" id="h-open-${key}" class="h-open-cb" data-day="${key}" />
+                      <span></span>
+                    </label>
+                  </div>
+                  <div><input type="time" id="h-from-${key}" class="h-time" step="900" /></div>
+                  <div><input type="time" id="h-to-${key}"   class="h-time" step="900" /></div>
+                `);
+              });
+            })();
+          </script>
+        </div>
+        <div id="hours-msg" style="font-size:.85rem;margin:12px 0;display:none"></div>
+        <button type="submit" class="btn btn-primary" id="hours-save-btn">Save Hours</button>
+      </form>
+    </div>
+
     <!-- ── Change Password ── -->
     <div class="admin-card">
       <h3>Change Password</h3>
@@ -276,6 +312,7 @@ function showAdmin() {
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('admin-panel').style.display  = 'block';
   loadAdminItems();
+  loadHoursAdmin();
 }
 
 // ── Login form ──────────────────────────────────────
@@ -494,6 +531,62 @@ document.getElementById('edit-item-form').addEventListener('submit', async e => 
   } finally {
     btn.disabled    = false;
     btn.textContent = 'Save Changes';
+  }
+});
+
+// ── Trading Hours ───────────────────────────────────
+const HOUR_DAYS = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
+
+async function loadHoursAdmin() {
+  try {
+    const hours = await api('GET', '/api/hours');
+    HOUR_DAYS.forEach(day => {
+      const d = hours[day];
+      if (!d) return;
+      document.getElementById(`h-open-${day}`).checked = !!d.open;
+      document.getElementById(`h-from-${day}`).value   = d.from || '09:30';
+      document.getElementById(`h-to-${day}`).value     = d.to   || '17:00';
+      toggleHourRow(day, !!d.open);
+    });
+  } catch (err) {
+    showToast('Could not load hours: ' + err.message);
+  }
+}
+
+function toggleHourRow(day, open) {
+  document.getElementById(`h-from-${day}`).disabled = !open;
+  document.getElementById(`h-to-${day}`).disabled   = !open;
+}
+
+document.querySelectorAll('.h-open-cb').forEach(cb => {
+  cb.addEventListener('change', () => toggleHourRow(cb.dataset.day, cb.checked));
+});
+
+document.getElementById('hours-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = document.getElementById('hours-save-btn');
+  const msg = document.getElementById('hours-msg');
+  btn.disabled = true; btn.textContent = 'Saving…';
+
+  const payload = {};
+  HOUR_DAYS.forEach(day => {
+    payload[day] = {
+      open: document.getElementById(`h-open-${day}`).checked,
+      from: document.getElementById(`h-from-${day}`).value,
+      to:   document.getElementById(`h-to-${day}`).value
+    };
+  });
+
+  try {
+    await api('PUT', '/api/hours', payload);
+    msg.style.display = 'block'; msg.style.color = '#166534';
+    msg.textContent = '✅ Hours saved and live on the website.';
+    setTimeout(() => { msg.style.display = 'none'; }, 3000);
+  } catch (err) {
+    msg.style.display = 'block'; msg.style.color = '#991b1b';
+    msg.textContent = 'Error: ' + err.message;
+  } finally {
+    btn.disabled = false; btn.textContent = 'Save Hours';
   }
 });
 

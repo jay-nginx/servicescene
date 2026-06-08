@@ -25,46 +25,51 @@ window.addEventListener('scroll', () => {
 // ── Contact form ──
 const contactForm = document.getElementById('contact-form');
 if (contactForm) {
+  const submitBtn    = contactForm.querySelector('button[type="submit"]');
+  const subjectEl    = document.getElementById('cf-subject');
+  const suburbGroup  = document.getElementById('cf-suburb-group');
+  const suburbInput  = document.getElementById('cf-suburb');
+
+  function toggleSuburb() {
+    const isCallout = subjectEl.value === 'Call-Out Service';
+    suburbGroup.style.display = isCallout ? 'block' : 'none';
+    suburbInput.required      = isCallout;
+  }
+  subjectEl.addEventListener('change', toggleSuburb);
+  toggleSuburb();
+
   contactForm.addEventListener('submit', async e => {
     e.preventDefault();
 
-    const btn = contactForm.querySelector('button[type="submit"]');
     const successEl = document.getElementById('form-success');
     const errorEl   = document.getElementById('form-error');
+    if (successEl) successEl.style.display = 'none';
+    if (errorEl)   errorEl.style.display   = 'none';
 
-    // Reset state
-    if (errorEl) errorEl.style.display = 'none';
-    successEl.style.display = 'none';
-    btn.disabled    = true;
-    btn.textContent = 'Sending…';
-
-    const payload = {
-      name:    document.getElementById('cf-name').value,
-      phone:   document.getElementById('cf-phone').value,
-      email:   document.getElementById('cf-email').value,
-      subject: document.getElementById('cf-subject').value,
-      message: document.getElementById('cf-message').value
-    };
+    const originalText    = submitBtn.textContent;
+    submitBtn.textContent = 'Sending…';
+    submitBtn.disabled    = true;
 
     try {
-      const res  = await fetch('/api/contact', {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify(payload)
-      });
-      const data = await res.json();
+      const formData = new FormData(contactForm);
 
-      if (res.ok) {
-        successEl.style.display = 'block';
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body:   formData
+      });
+      const data = await response.json();
+
+      if (response.ok) {
+        if (successEl) successEl.style.display = 'block';
         contactForm.reset();
       } else {
-        if (errorEl) { errorEl.textContent = data.error || 'Something went wrong.'; errorEl.style.display = 'block'; }
+        if (errorEl) { errorEl.textContent = data.message || 'Something went wrong.'; errorEl.style.display = 'block'; }
       }
-    } catch (err) {
+    } catch {
       if (errorEl) { errorEl.textContent = 'Could not send message. Please call us on 03 9888 1844.'; errorEl.style.display = 'block'; }
     } finally {
-      btn.disabled    = false;
-      btn.textContent = 'Send Message';
+      submitBtn.textContent = originalText;
+      submitBtn.disabled    = false;
     }
   });
 }
@@ -260,6 +265,71 @@ async function loadForSale() {
   }
 }
 
+// ══════════════════════════════════════════
+//  TRADING HOURS
+// ══════════════════════════════════════════
+
+function fmt12h(t) {
+  if (!t) return '';
+  const [hStr, mStr] = t.split(':');
+  let h = parseInt(hStr, 10);
+  const m = mStr || '00';
+  const ampm = h >= 12 ? 'pm' : 'am';
+  if (h > 12) h -= 12;
+  if (h === 0) h = 12;
+  return m === '00' ? `${h}${ampm}` : `${h}:${m}${ampm}`;
+}
+
+async function loadHours() {
+  try {
+    const res   = await fetch('/api/hours');
+    if (!res.ok) return;
+    const hours = await res.json();
+
+    // Build topbar summary — group days with identical open hours
+    const DAYS = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
+    const DAY_SHORT = { monday:'Mon', tuesday:'Tue', wednesday:'Wed', thursday:'Thu', friday:'Fri', saturday:'Sat', sunday:'Sun' };
+
+    // Group consecutive open days with same times
+    const openDays = DAYS.filter(d => hours[d]?.open);
+    const groups = [];
+    for (const day of openDays) {
+      const { from, to } = hours[day];
+      const last = groups[groups.length - 1];
+      if (last && last.from === from && last.to === to) {
+        last.days.push(day);
+      } else {
+        groups.push({ days: [day], from, to });
+      }
+    }
+
+    const topbarParts = groups.map(g => {
+      const label = g.days.length === 1
+        ? DAY_SHORT[g.days[0]]
+        : `${DAY_SHORT[g.days[0]]}–${DAY_SHORT[g.days[g.days.length - 1]]}`;
+      return `${label}: ${fmt12h(g.from)} – ${fmt12h(g.to)}`;
+    });
+
+    const topbarEl = document.getElementById('topbar-hours');
+    if (topbarEl) topbarEl.textContent = topbarParts.join('  |  ') || 'See website for hours';
+
+    // Build contact section — one line per day or group
+    const contactLines = DAYS.map(day => {
+      const d = hours[day];
+      const label = DAY_SHORT[day];
+      if (!d?.open) return `${label}: Closed`;
+      return `${label}: ${fmt12h(d.from)} – ${fmt12h(d.to)}`;
+    });
+
+    const contactEl = document.getElementById('contact-hours');
+    if (contactEl) contactEl.innerHTML = contactLines.join('<br />');
+
+  } catch {
+    // Silently ignore — hours are optional enhancement
+  }
+}
+
 // Init
 loadForSale();
 loadAnnouncement();
+loadHours();

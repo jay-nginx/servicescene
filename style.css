@@ -868,7 +868,7 @@ ul  { list-style: none; }
   grid-template-columns: 1.6fr 1fr 1fr 1fr;
   gap: 40px;
 }
-.footer-brand img { height: 40px; object-fit: contain; margin-bottom: 16px; filter: brightness(0) invert(1); opacity: .85; }
+.footer-brand img { height: 40px; object-fit: contain; margin-bottom: 16px; border-radius: 6px; }
 .footer-brand p   { font-size: .85rem; line-height: 1.65; max-width: 260px; margin-bottom: 8px; }
 .footer-acn       { font-size: .75rem; color: rgba(255,255,255,.35); }
 .footer-col h4    { color: #fff; font-size: .85rem; font-weight: 700; letter-spacing: .5px; margin-bottom: 16px; text-transform: uppercase; }
@@ -1157,4 +1157,46 @@ ul  { list-style: none; }
   .footer-brand { grid-column: span 1; }
   .admin-items-grid { grid-template-columns: 1fr; }
   .login-box { padding: 32px 24px; }
+  .hours-grid { grid-template-columns: 1fr 48px 1fr 1fr; }
+}
+
+/* ── Trading Hours grid ── */
+.hours-grid {
+  display: grid;
+  grid-template-columns: 140px 60px 1fr 1fr;
+  gap: 8px 12px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.hours-header {
+  font-size: .72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .6px;
+  color: #94a3b8;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #e2e8f0;
+}
+.hours-day-label {
+  font-size: .9rem;
+  font-weight: 500;
+  color: #1e293b;
+}
+.hours-toggle-wrap {
+  display: flex;
+  align-items: center;
+}
+.h-time {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: .88rem;
+  color: #1e293b;
+  background: #fff;
+}
+.h-time:disabled {
+  background: #f8fafc;
+  color: #94a3b8;
+  border-color: #f1f5f9;
 }

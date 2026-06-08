@@ -22,7 +22,7 @@
       <span>✉️ info@servicescene.com.au</span>
     </div>
     <div class="topbar-right">
-      <span>Mon–Fri: 9:30am – 5pm &nbsp;|&nbsp; Tue until 7pm</span>
+      <span id="topbar-hours">Loading hours…</span>
       <span class="topbar-divider">|</span>
       <a href="tel:0398881844">📞 03 9888 1844</a>
     </div>
@@ -35,7 +35,7 @@
 <header class="site-header" id="site-header">
   <div class="header-inner">
     <a href="#" class="header-logo">
-      <img src="images/logo.svg" alt="Service Scene" onerror="this.src='images/ss-logo.png'" />
+      <img src="images/logo-new.png" alt="Service Scene" />
     </a>
 
     <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
@@ -62,7 +62,7 @@
 <section class="hero">
   <div class="hero-inner">
     <div class="hero-badge">Est. 1989 · Melbourne Eastern Suburbs</div>
-    <div class="hero-lg-badge">⭐ LG's No. 1 Preferred Authorised Service Centre · Melbourne Metro</div>
+    <div class="hero-lg-badge">⭐ LG's No. 1 Preferred Authorised Service Centre · Melbourne Metro &nbsp;|&nbsp; Panasonic Authorised Service Centre</div>
     <h1>Melbourne's Trusted<br /><em>Electronics Repair</em> Specialists</h1>
     <p>Authorised service centre for TVs, audio equipment, white goods &amp; brown goods.</p>
     <div class="hero-actions">
@@ -106,7 +106,7 @@
     <div class="section-header">
       <p class="section-label">What We Fix</p>
       <h2>Our Services</h2>
-      <p class="section-sub">We repair a wide range of consumer electronics and household appliances — all brands, all models.</p>
+      <p class="section-sub">TVs, audio gear, microwaves, vacuum cleaners — if it plugs in, we can probably fix it.</p>
     </div>
 
     <div class="services-grid">
@@ -173,7 +173,14 @@
       <div class="lg-banner-icon">🏅</div>
       <div>
         <strong>LG's No. 1 Preferred Authorised Service Centre for Melbourne Metro</strong>
-        <p>Recognised and endorsed by LG Australia as their top-rated authorised repair centre across the Melbourne metropolitan area.</p>
+        <p>LG Australia's No. 1 Preferred Authorised Service Centre for Melbourne Metro.</p>
+      </div>
+    </div>
+    <div class="lg-banner">
+      <div class="lg-banner-icon">🏅</div>
+      <div>
+        <strong>Panasonic Authorised Service Centre</strong>
+        <p>Authorised by Panasonic Australia to service and repair Panasonic products.</p>
       </div>
     </div>
 
@@ -181,7 +188,7 @@
       <div class="lg-banner-icon">🚶</div>
       <div>
         <strong>Walk-in Service — No Appointment Needed</strong>
-        <p>Bring in your <strong>LG Microwave</strong> or <strong>LG Vacuum Cleaner</strong> with a simple fault and we'll assess and resolve it on the spot during business hours. Fast, convenient, no waiting around.</p>
+        <p>Bring in your <strong>LG Microwave</strong> or <strong>LG Vacuum Cleaner</strong> and we'll assess it on the spot during business hours. No appointment needed — just drop in.</p>
       </div>
     </div>
 
@@ -189,7 +196,7 @@
       <div class="why-card">
         <div class="why-icon">🏆</div>
         <h4>35+ Years Experience</h4>
-        <p>Serving Melbourne's Eastern Suburbs since 1989. We've seen every brand, every fault, every model.</p>
+        <p>Serving Melbourne's Eastern Suburbs since 1989.</p>
       </div>
       <div class="why-card">
         <div class="why-icon">💬</div>
@@ -218,7 +225,7 @@
     <div class="section-header">
       <p class="section-label">Out-of-Warranty Repairs</p>
       <h2>Quote &amp; Assessment Fees</h2>
-      <p class="section-sub">All out-of-warranty repairs require an assessment quote before work commences. Our fees are straightforward and transparent.</p>
+      <p class="section-sub">All out-of-warranty repairs start with an assessment. No hidden fees — you'll know the cost before we touch anything.</p>
     </div>
 
     <div class="quotes-grid">
@@ -305,7 +312,7 @@
     <div class="section-header">
       <p class="section-label">Pre-Owned Items</p>
       <h2>For Sale</h2>
-      <p class="section-sub">Quality second-hand electronics and parts — tested and ready to go. Updated regularly.</p>
+      <p class="section-sub">Tested before listing. Stock changes regularly.</p>
     </div>
 
     <div class="sale-grid" id="forsale-grid"></div>
@@ -369,7 +376,7 @@
             <div class="contact-detail-icon">🕐</div>
             <div>
               <strong>Trading Hours</strong>
-              <p>Monday, Wed – Fri: 9:30am – 5:00pm<br />Tuesday: 9:30am – 7:00pm<br />Saturday – Sunday: Closed</p>
+              <p id="contact-hours">Loading hours…</p>
             </div>
           </div>
         </div>
@@ -385,38 +392,55 @@
 
       <div class="contact-form-wrap">
         <form class="contact-form" id="contact-form">
+          <input type="hidden" name="access_key" value="436d616d-f29d-4b4f-bdba-ec1d5ef209b1" />
+          <input type="checkbox" name="botcheck" style="display:none" />
           <div id="form-success" class="form-success" style="display:none">
-            ✅ Thanks! Your message has been sent. We'll be in touch within 1 business day.
+            ✅ Thanks! Your message has been sent. We'll be in touch within 1–2 business days.
           </div>
           <div id="form-error" class="form-error" style="display:none"></div>
+
           <div class="form-row">
             <div class="form-group">
               <label for="cf-name">Your Name *</label>
-              <input type="text" id="cf-name" placeholder="John Smith" required />
+              <input type="text" id="cf-name" name="name" placeholder="John Smith" required />
             </div>
             <div class="form-group">
-              <label for="cf-phone">Phone Number</label>
-              <input type="tel" id="cf-phone" placeholder="04xx xxx xxx" />
+              <label for="cf-phone">Phone Number *</label>
+              <input type="tel" id="cf-phone" name="phone" placeholder="04xx xxx xxx" required />
             </div>
           </div>
+
           <div class="form-group">
             <label for="cf-email">Email Address *</label>
-            <input type="email" id="cf-email" placeholder="you@example.com" required />
+            <input type="email" id="cf-email" name="email" placeholder="you@example.com" required />
           </div>
+
           <div class="form-group">
             <label for="cf-subject">Subject</label>
-            <select id="cf-subject">
+            <select id="cf-subject" name="subject">
               <option>General Enquiry</option>
               <option>Book a Repair</option>
               <option>Quote Request</option>
-              <option>Call-out Service</option>
+              <option value="Call-Out Service">Call-Out Service</option>
               <option>For Sale Item Enquiry</option>
             </select>
           </div>
-          <div class="form-group">
-            <label for="cf-message">Message *</label>
-            <textarea id="cf-message" rows="5" placeholder="Describe your appliance, the fault, brand/model if known…" required></textarea>
+
+          <div class="form-group" id="cf-suburb-group" style="display:none">
+            <label for="cf-suburb">Your Suburb *</label>
+            <input type="text" id="cf-suburb" name="suburb" placeholder="e.g. Glen Waverley" />
           </div>
+
+          <div class="form-group">
+            <label for="cf-model">Make &amp; Model Number <span style="font-weight:400;color:#94a3b8">(if known)</span></label>
+            <input type="text" id="cf-model" name="model_number" placeholder="e.g. LG 55UN7300, Samsung WW80J5555" />
+          </div>
+
+          <div class="form-group">
+            <label for="cf-message">Fault Description *</label>
+            <textarea id="cf-message" name="message" rows="4" placeholder="Describe what the appliance is doing — or not doing. The more detail, the better." required></textarea>
+          </div>
+
           <button type="submit" class="btn btn-dark btn-full">Send Message</button>
         </form>
       </div>
@@ -432,8 +456,8 @@
   <div class="footer-inner">
 
     <div class="footer-brand">
-      <img src="images/logo.svg" alt="Service Scene" onerror="this.src='images/ss-logo.png'" />
-      <p>Melbourne's trusted electronics repair specialist since 1989. Honest assessments, quality repairs.</p>
+      <img src="images/logo-new.png" alt="Service Scene" />
+      <p>Family-run since 1989. Eastern Suburbs Melbourne.</p>
       <p class="footer-acn">ACN 087 486 995</p>
     </div>
 

@@ -18,6 +18,7 @@ const DB_DIR       = path.join(__dirname, 'db');
 const ITEMS_PATH   = path.join(DB_DIR, 'items.json');
 const CFG_PATH     = path.join(DB_DIR, 'config.json');
 const ANNOUNCE_PATH = path.join(DB_DIR, 'announcement.json');
+const HOURS_PATH    = path.join(DB_DIR, 'hours.json');
 
 // Ensure db/ directory exists
 if (!fs.existsSync(DB_DIR)) fs.mkdirSync(DB_DIR, { recursive: true });
@@ -52,6 +53,18 @@ function saveConfig(cfg) { writeJSON(CFG_PATH, cfg); }
 
 function getAnnouncement()      { return readJSON(ANNOUNCE_PATH, null); }
 function saveAnnouncement(data) { writeJSON(ANNOUNCE_PATH, data); }
+
+const DEFAULT_HOURS = {
+  monday:    { open: true,  from: '09:30', to: '17:00' },
+  tuesday:   { open: true,  from: '09:30', to: '19:00' },
+  wednesday: { open: true,  from: '09:30', to: '17:00' },
+  thursday:  { open: true,  from: '09:30', to: '17:00' },
+  friday:    { open: true,  from: '09:30', to: '17:00' },
+  saturday:  { open: false, from: '09:30', to: '17:00' },
+  sunday:    { open: false, from: '09:30', to: '17:00' }
+};
+function getHours()       { return readJSON(HOURS_PATH, DEFAULT_HOURS); }
+function saveHours(hours) { writeJSON(HOURS_PATH, hours); }
 
 // ── Business day helpers ────────────────────────────
 const BUSINESS_DAYS = 5;
@@ -406,6 +419,34 @@ Sent via servicescene.com.au contact form
       detail: err.message   // visible in browser console for debugging
     });
   }
+});
+
+// ══════════════════════════════════════════════════
+//  HOURS ROUTES
+// ══════════════════════════════════════════════════
+
+// GET /api/hours  – public
+app.get('/api/hours', (req, res) => {
+  res.json(getHours());
+});
+
+// PUT /api/hours  – admin: replace all hours
+app.put('/api/hours', requireAuth, (req, res) => {
+  const days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
+  const body = req.body || {};
+  const hours = {};
+  for (const day of days) {
+    const d = body[day];
+    if (!d) return res.status(400).json({ error: `Missing day: ${day}` });
+    hours[day] = {
+      open: !!d.open,
+      from: d.from || '09:00',
+      to:   d.to   || '17:00'
+    };
+  }
+  saveHours(hours);
+  console.log('🕐 Trading hours updated');
+  res.json(hours);
 });
 
 // ── Start ──────────────────────────────────────────
